@@ -4,12 +4,15 @@ import { useSelectedMovies } from '../../contexts/SelectedMoviesContext';
 import { Link } from 'react-router-dom';
 import useMovies from '../movies/useMovies';
 import FilmReelSpinner from '../../ui/Spinner';
+import useMovieById from '../services/useMovieById';
 
 function List() {
+  // const { selectedMovies } = useSelectedMovies();
   const { movies, isLoading } = useMovies();
   const { selectedMovies, removeMovie } = useSelectedMovies();
   const [selectedTrailer, setSelectedTrailer] = useState(null);
   const iframeRef = useRef(null);
+  // const { movie, trailerKey } = useMovieById(id || movieId);
 
   useEffect(() => {
     const handleClickOutsideAndEscape = (event) => {

@@ -32,11 +32,13 @@ function SearchBox({
             {movie.title}
           </p>
           {/* <p>{movie.original_title}</p> */}
-          <img
-            src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-            alt={movie.original_title}
-            className="h-14 w-14 rounded-lg bg-cover object-cover"
-          />
+          {movie.poster_path && (
+            <img
+              src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+              alt={movie.original_title}
+              className="h-14 w-14 rounded-lg bg-cover object-cover"
+            />
+          )}
         </Link>
       ))}
     </div>

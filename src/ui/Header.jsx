@@ -27,7 +27,7 @@ function Header() {
   return (
     <>
       <header
-        className="sticky top-0 z-50 flex w-full items-center bg-gray-700 bg-opacity-50 px-4
+        className="sticky top-0 z-50 flex w-full items-center bg-[#0d0c0c8d] bg-opacity-70 px-4
        py-3 font-madimi text-white duration-500 sm:p-3"
       >
         <div className="m-auto flex w-[80%] justify-between">
