@@ -2,7 +2,16 @@ import { Icon } from '@iconify/react';
 import OrderBy from './OrderBy';
 import GenresFilter from './GenresFilter';
 
-function FilterAndSort({ setIsFilterClicked, isFilterClicked }) {
+function FilterAndSort({
+  setIsFilterClicked,
+  isFilterClicked,
+  isSortedByRating,
+  // setIsSortedByRating,
+  isSortedByDateAscending,
+  // setIsSortedByDateAscending,
+  isSortedByDateDescending,
+  // setIsSortedByDateDescending,
+}) {
   return (
     <>
       {/* <div
@@ -12,8 +21,18 @@ function FilterAndSort({ setIsFilterClicked, isFilterClicked }) {
       <h2 className=" font-truculenta text-2xl font-bold text-white">
         Order By
       </h2>
-      <OrderBy />
-      <h2 className=" font-truculenta text-2xl font-bold text-white">Genres</h2>
+      <OrderBy
+        isSortedByRating={isSortedByRating}
+        // setIsSortedByRating={setIsSortedByRating}
+        isSortedByDateAscending={isSortedByDateAscending}
+        // setIsSortedByDateAscending={setIsSortedByDateAscending}
+        isSortedByDateDescending={isSortedByDateDescending}
+        // setIsSortedByDateDescending={setIsSortedByDateDescending}
+      />
+
+      <h2 className="mt-8  font-truculenta text-2xl font-bold text-white">
+        Genres
+      </h2>
       <GenresFilter />
     </>
   );

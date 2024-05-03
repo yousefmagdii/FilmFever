@@ -8,6 +8,7 @@ import { SelectedMoviesProvider } from './contexts/SelectedMoviesContext';
 import MovieInfo from './features/movieInfo/MovieInfo';
 import { CurrentPageProvider } from './contexts/CurrentPageContext';
 import { SearchQueryProvider } from './contexts/SearchQueryContext';
+import { SortPreferencesProvider } from './contexts/SortPreferencesContext';
 
 const router = createBrowserRouter([
   {
@@ -24,13 +25,15 @@ const router = createBrowserRouter([
 ]);
 function App() {
   return (
-    <SelectedMoviesProvider>
-      <SearchQueryProvider>
-        <CurrentPageProvider>
-          <RouterProvider router={router} />
-        </CurrentPageProvider>
-      </SearchQueryProvider>
-    </SelectedMoviesProvider>
+    <SortPreferencesProvider>
+      <SelectedMoviesProvider>
+        <SearchQueryProvider>
+          <CurrentPageProvider>
+            <RouterProvider router={router} />
+          </CurrentPageProvider>
+        </SearchQueryProvider>
+      </SelectedMoviesProvider>
+    </SortPreferencesProvider>
   );
 }
 

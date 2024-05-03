@@ -16,7 +16,7 @@ const useMovieById = (movieId) => {
 
       try {
         const response = await fetch(
-          `${API_URL}/movie/${movieId}?api_key=${API_KEY}`,
+          `${API_URL}/movie/${movieId}?api_key=${API_KEY}&without_genres=99,10755&vote_count.gte=200`,
         );
         if (!response.ok) {
           throw new Error('Failed to fetch movie');

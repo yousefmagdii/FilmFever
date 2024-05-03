@@ -10,12 +10,45 @@ import { useSearchQuery } from '../../contexts/SearchQueryContext';
 import FilterAndSort from '../../ui/FilterAndSort';
 
 function Movie() {
-  const { searchQuery, setSearchQuery } = useSearchQuery();
-  const { movies, isLoading, error, totalPages } = useMovies();
-  const { currentPage, setCurrentPage } = useCurrentPage();
   const [isFilterClicked, setIsFilterClicked] = useState(false);
-  const filterRef = useRef(null); // Ref for the filter and sort section
-  const overlayRef = useRef(null); // Ref for the overlay div
+  const { searchQuery, setSearchQuery } = useSearchQuery();
+  const {
+    movies,
+    isLoading,
+    error,
+    totalPages,
+    // isSortedByRating,
+    setIsSortedByRating,
+    // isSortedByDateAscending,
+    setIsSortedByDateAscending,
+    // isSortedByDateDescending,
+    setIsSortedByDateDescending,
+  } = useMovies();
+
+  console.log('mmm', movies);
+  //const sortedMovies = movies.sort((a, b) => b.vote_average - a.vote_average);
+  //console.log('sorted', sortedMovies);
+  const { currentPage, setCurrentPage } = useCurrentPage();
+  const filterRef = useRef(null);
+  const overlayRef = useRef(null);
+  /*  const sortedMoviesByRating = [...movies];
+  const sortedMoviesByDateAsc = [...movies];
+  const sortedMoviesByDateDesc = [...movies];
+  sortedMoviesByRating.sort((a, b) => b.vote_average - a.vote_average);
+  sortedMoviesByDateAsc.sort(
+    (a, b) => new Date(a.release_date) - new Date(b.release_date),
+  );
+  console.log('sortedMoviesByDateAsc', sortedMoviesByDateAsc);
+  sortedMoviesByDateDesc.sort(
+    (a, b) => new Date(b.release_date) - new Date(a.release_date),
+  );
+  console.log('sortedMoviesByDateDesc', sortedMoviesByDateDesc); */
+
+  /*  const sortMoviesByRating = () => {
+    const sortedMovies = [...movies];
+    sortedMovies.sort((a, b) => b.vote_average - a.vote_average);
+    return sortedMovies;
+  }; */
 
   useEffect(() => {
     // Save currentPage to localStorage whenever it changes
@@ -73,36 +106,43 @@ function Movie() {
   return (
     <>
       <button
-        className={`fixed left-2 top-16 z-50 mr-auto transition-all duration-700 `}
+        className={` left-2 top-16 z-50 mr-auto transition-all duration-700 `}
       >
         {!isFilterClicked ? (
           <Icon
             icon="line-md:filter-twotone"
             height="30"
             width="30"
-            className={`z-50 m-1 text-nfRed transition-all duration-700 `}
+            className={`absolute z-50 m-1 text-nfRed transition-all duration-100 `}
             onClick={() => setIsFilterClicked(!isFilterClicked)}
           />
         ) : (
           <Icon
             icon="mdi:close"
-            height="25"
-            width="25"
-            className=" z-50  inline cursor-pointer
-         rounded-full bg-black bg-opacity-50 text-nfRed"
+            height="28"
+            width="28"
+            className="fixed left-2 z-50 inline
+         cursor-pointer rounded-full bg-black bg-opacity-50 text-white"
             onClick={() => setIsFilterClicked(!isFilterClicked)}
           />
         )}
       </button>
       <div
-        className={`fixed bottom-0 top-16 z-10 h-dvh w-80 bg-[#0d0c0c8d] bg-opacity-70 text-center transition-all duration-700 ${
+        className={`fixed bottom-0 top-16 z-10 h-dvh w-80 bg-[#0d0c0c8d] bg-opacity-70 text-center transition-all duration-1000 ${
           isFilterClicked ? 'left-0' : '-left-80'
         }`}
         ref={filterRef} // Assign the ref to the filter and sort section
       >
         {isFilterClicked && (
           <div className="mt-8">
-            <FilterAndSort />
+            <FilterAndSort
+              // isSortedByRating={isSortedByRating}
+              setIsSortedByRating={setIsSortedByRating}
+              // isSortedByDateAscending={isSortedByDateAscending}
+              setIsSortedByDateAscending={setIsSortedByDateAscending}
+              // isSortedByDateDescending={isSortedByDateDescending}
+              setIsSortedByDateDescending={setIsSortedByDateDescending}
+            />
           </div>
         )}
       </div>
@@ -112,59 +152,69 @@ function Movie() {
           isFilterClicked ? 'pointer-events-none opacity-40' : ''
         }`}
       >
-        {movies.map((movie, index) => (
-          <div
-            className={`group relative mx-auto flex w-fit cursor-pointer flex-col items-center `}
-            key={movie.id}
-          >
-            <Link
-              to={{
-                pathname: `/movies/${movie.id}`,
-                state: { movies, currentPage },
-              }}
+        {
+          /*  (isSortedByRating
+          ? sortedMoviesByRating
+          : isSortedByDateAscending
+            ? sortedMoviesByDateAsc
+            : isSortedByDateDescending
+              ? sortedMoviesByDateDesc
+              : movies
+        ) */
+          movies.map((movie, index) => (
+            <div
+              className={`group relative mx-auto flex w-fit cursor-pointer flex-col items-center `}
+              key={movie.id}
             >
-              <img
-                src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                alt={movie.title}
-                className={`h-90 w-64 rounded-lg bg-cover object-cover ${
-                  isFilterClicked ? 'cursor-no-drop' : ''
-                }`}
-              />
-            </Link>
-            <span className="absolute bottom-0 left-0 right-0 z-10 hidden bg-gradient-to-t from-[#121212ac] to-[#00000000] py-5 text-center font-bold text-orange-50 group-hover:block group-hover:rounded-b-lg group-hover:duration-700">
-              <span className="p-1">{movie.title}</span>
-            </span>
-            <button
-              className="absolute right-2 top-2 rounded-full bg-gray-800 bg-opacity-40 p-[0.10rem] "
-              onClick={() => handleToggleHeartState(movie)}
-            >
-              {!heartStates[movie.id] ? (
-                <Icon
-                  icon="mdi:heart-outline"
-                  height="20"
-                  width="20"
-                  className="m-1"
-                  style={{
-                    color: '#fff',
-                    transition: 'color 0.3s ease',
-                  }}
+              <Link
+                to={{
+                  pathname: `/movies/${movie.id}`,
+                  state: { movies, currentPage },
+                }}
+              >
+                <img
+                  src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                  alt={movie.title}
+                  className={`h-90 w-64 rounded-lg bg-cover object-cover ${
+                    isFilterClicked ? 'cursor-no-drop' : ''
+                  }`}
                 />
-              ) : (
-                <Icon
-                  icon="mdi:heart"
-                  height="20"
-                  width="20"
-                  className="m-1"
-                  style={{
-                    color: '#E50914',
-                    transition: 'color 0.3s ease',
-                  }}
-                />
-              )}
-              <Toaster position="top-center" reverseOrder={false} width />
-            </button>
-          </div>
-        ))}
+              </Link>
+              <span className="absolute bottom-0 left-0 right-0 z-10 hidden bg-gradient-to-t from-[#121212ac] to-[#00000000] py-5 text-center font-bold text-orange-50 group-hover:block group-hover:rounded-b-lg group-hover:duration-700">
+                <span className="p-1">{movie.title}</span>
+              </span>
+              <button
+                className="absolute right-2 top-2 rounded-full bg-gray-800 bg-opacity-40 p-[0.10rem] "
+                onClick={() => handleToggleHeartState(movie)}
+              >
+                {!heartStates[movie.id] ? (
+                  <Icon
+                    icon="mdi:heart-outline"
+                    height="20"
+                    width="20"
+                    className="m-1"
+                    style={{
+                      color: '#fff',
+                      transition: 'color 0.3s ease',
+                    }}
+                  />
+                ) : (
+                  <Icon
+                    icon="mdi:heart"
+                    height="20"
+                    width="20"
+                    className="m-1"
+                    style={{
+                      color: '#E50914',
+                      transition: 'color 0.3s ease',
+                    }}
+                  />
+                )}
+                <Toaster position="top-center" reverseOrder={false} width />
+              </button>
+            </div>
+          ))
+        }
         {/* Overlay to prevent clicking on the grid when the filter section is open */}
         {isFilterClicked && (
           <div

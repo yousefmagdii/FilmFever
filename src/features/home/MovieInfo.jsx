@@ -51,6 +51,12 @@ function MovieInfo() {
           />
           {/* Uncomment below to show duration */}
           {/* <p className="text-xl font-bold leading-8 text-gray-200 ">Duration: {selectedMovie.duration} minutes⌛</p> */}
+          {/* <img
+            src={`https://image.tmdb.org/t/p/original${selectedMovie.backdrop_path}`}
+            alt={selectedMovie.title}
+            width={200}
+            height={200}
+          /> */}
         </>
       ) : (
         <FilmReelSpinner />

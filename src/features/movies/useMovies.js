@@ -1,16 +1,64 @@
 import { useEffect, useState } from 'react';
 import { useCurrentPage } from '../../contexts/CurrentPageContext'; // Import useCurrentPage hook
+import { useSortPreferences } from '../../contexts/SortPreferencesContext';
 
 const API_KEY = '5bd0066ae9f9e2c1b2f8e7442247c890';
 const API_URL = 'https://api.themoviedb.org/3';
 const MOVIES_PER_PAGE = 30;
-
 function useMovies(searchQuery = '') {
-  const { currentPage } = useCurrentPage(); // Use currentPage from context
+  let sortBy = 'popularity.desc';
+  //release_date.desc
+  //release_date.asc
+  //vote_average.desc
+  /*  const [isSortedByRating, setIsSortedByRating] = useState(false);
+  const [isSortedByDateAscending, setIsSortedByDateAscending] = useState(false);
+  const [isSortedByDateDescending, setIsSortedByDateDescending] =
+    useState(false); */
+  // const [isSortedByRating, setIsSortedByRating] = useState(
+  //   localStorage.getItem('isSortedByRating') === 'true' || false,
+  // );
+  // const [isSortedByDateAscending, setIsSortedByDateAscending] = useState(
+  //   localStorage.getItem('isSortedByDateAscending') === 'true' || false,
+  // );
+  // const [isSortedByDateDescending, setIsSortedByDateDescending] = useState(
+  //   localStorage.getItem('isSortedByDateDescending') === 'true' || false,
+  // );
+  const {
+    isSortedByRating,
+    isSortedByDateAscending,
+    isSortedByDateDescending,
+    // setIsSortedByRating,
+    // setIsSortedByDateAscending,
+    // setIsSortedByDateDescending,
+  } = useSortPreferences();
+
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [totalPages, setTotalPages] = useState(1);
+
+  const { currentPage } = useCurrentPage();
+
+  const saveSortingPreferences = () => {
+    localStorage.setItem('isSortedByRating', isSortedByRating);
+    localStorage.setItem('isSortedByDateAscending', isSortedByDateAscending);
+    localStorage.setItem('isSortedByDateDescending', isSortedByDateDescending);
+  };
+
+  useEffect(() => {
+    // Save sorting preferences when they change
+    saveSortingPreferences();
+  }, [isSortedByRating, isSortedByDateAscending, isSortedByDateDescending]);
+
+  if (isSortedByRating) {
+    sortBy = 'vote_average.desc';
+  } else if (isSortedByDateAscending) {
+    sortBy = 'release_date.asc';
+  } else if (isSortedByDateDescending) {
+    sortBy = 'release_date.desc';
+  }
+
+  console.log('sortBy', sortBy);
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -20,7 +68,7 @@ function useMovies(searchQuery = '') {
         // Calculate the offset based on the current page and number of movies per page
         const offset = (currentPage - 1) * MOVIES_PER_PAGE;
 
-        let url = `${API_URL}/movie/popular?api_key=${API_KEY}&page=${currentPage}`;
+        let url = `${API_URL}/discover/movie?api_key=${API_KEY}&page=${currentPage}&sort_by=${sortBy}&include_adult=false&without_genres=99,10755&vote_count.gte=200`;
 
         if (searchQuery) {
           url = `${API_URL}/search/movie?api_key=${API_KEY}&query=${searchQuery}&page=${currentPage}`;
@@ -70,9 +118,21 @@ function useMovies(searchQuery = '') {
     };
 
     fetchMovies();
-  }, [currentPage, searchQuery]);
+  }, [currentPage, searchQuery, sortBy]); // Include sortBy in the dependencies array
 
-  return { movies, isLoading, error, currentPage, totalPages };
+  return {
+    movies,
+    isLoading,
+    error,
+    currentPage,
+    totalPages,
+    isSortedByRating,
+    // setIsSortedByRating,
+    isSortedByDateAscending,
+    // setIsSortedByDateAscending,
+    isSortedByDateDescending,
+    // setIsSortedByDateDescending,
+  };
 }
 
 export function useMoviesWithSearch(searchQuery) {

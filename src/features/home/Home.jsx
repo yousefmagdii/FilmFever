@@ -5,10 +5,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateSelectedImage } from './homeSlice';
 import MovieInfo from './MovieInfo';
 import useMovies from '../movies/useMovies';
+import FilmReelSpinner from '../../ui/Spinner';
 
 function Home() {
-  const { movies } = useMovies();
+  const { movies, isLoading } = useMovies();
   console.log(movies);
+
   const [selectedImageIndex, setSelectedImageIndex] = useState(2);
 
   const { imageUrl, name, description } = useSelector((store) => store.home);
@@ -59,23 +61,33 @@ function Home() {
         ? allImages.length - 1
         : startIndex + 3;
   }
-
+  if (isLoading) return <FilmReelSpinner />;
   return (
-    <div className="!h-dvh overflow-hidden">
+    <div
+      className="!h-dvh overflow-hidden"
+      // style={{
+      //   backgroundImage: `url('https://image.tmdb.org/t/p/original${movies[selectedImageIndex].backdrop_path}')`,
+      // }}
+    >
       <MovieInfo />
-      <div className="absolute  bottom-0 right-0 flex !h-96 w-[60%] items-center justify-center overflow-hidden">
+      <div className="absolute  bottom-4 right-3 flex !h-96 w-[50%] items-center justify-center overflow-hidden">
         <button
           className="absolute left-0 top-1/2 z-10 -translate-y-1/2 transform  rounded-full bg-white   text-nfRed active:bg-black active:text-white"
           onClick={() => moveCarousel('prev')}
         >
-          <Icon icon="mi:previous" height="40" width="70" className="p-2" />
+          <Icon
+            icon="material-symbols:play-arrow-outline"
+            height="40"
+            width="40"
+            className="rotate-180 p-2"
+          />
         </button>
         {allImages.slice(startIndex, endIndex + 1).map((image, index) => (
           <img
             key={startIndex + index}
             src={`https://image.tmdb.org/t/p/w500${image}`}
             alt={`Thumbnail ${startIndex + index + 1}`}
-            className={`  w-1/5 transform cursor-pointer rounded-3xl border-2 border-transparent p-1  ${startIndex + index === selectedImageIndex ? 'border-nfRed' : 'opacity-90 hover:opacity-100 hover:duration-300 hover:ease-in-out'}`}
+            className={`  w-1/4 transform cursor-pointer rounded-3xl border-2 border-transparent p-1  ${startIndex + index === selectedImageIndex ? 'border-nfRed' : 'opacity-90 hover:opacity-100 hover:duration-300 hover:ease-in-out'}`}
             onClick={() => selectImage(startIndex + index)}
           />
         ))}
@@ -83,7 +95,13 @@ function Home() {
           className="absolute right-0 top-1/2 -translate-y-1/2 transform rounded-full bg-white   text-nfRed active:bg-black active:text-white"
           onClick={() => moveCarousel('next')}
         >
-          <Icon icon="mi:next" height="40" width="70" className="p-2" />
+          {/* <Icon icon="mi:next" height="40" width="40" className="p-2" /> */}
+          <Icon
+            icon="material-symbols:play-arrow-outline"
+            height="40"
+            width="40"
+            className="p-2"
+          />
         </button>
       </div>
     </div>

@@ -79,15 +79,15 @@ function List() {
               <img
                 src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                 alt={movie.title}
-                className="h-60 w-52 rounded-xl object-cover  grayscale   duration-700 group-hover/listitem:h-[23rem] group-hover/listitem:grayscale-0 "
+                className="h-60 w-52 rounded-xl object-cover  grayscale   duration-700 group-hover/listitem:h-[17.5rem] group-hover/listitem:grayscale-0  "
               />
             </Link>
             <div className="  group-hover/listitem::bg-white">
               <p
                 className="bg-b-lg mt-2 rounded-b-lg bg-opacity-20
-                      from-[#121212ac] from-10%
-                  via-[#7c7c7c6e]  via-40%
-                  to-[#00000000] 
+                      from-[#030303e7] from-10%
+                  via-[#000000af]  via-40%
+                  to-[#1b1a1a34] 
                   to-100% pb-3
                       text-center text-nfRed  group-hover/listitem:absolute group-hover/listitem:bottom-0 group-hover/listitem:left-0 group-hover/listitem:right-0 group-hover/listitem:bg-gradient-to-t  group-hover/listitem:pt-8 group-hover/listitem:text-sm group-hover/listitem:text-white "
               >
