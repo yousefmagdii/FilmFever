@@ -5,14 +5,48 @@ import toast, { Toaster } from 'react-hot-toast';
 import { useRef, useState, useEffect } from 'react';
 
 import useMovieById from '../services/useMovieById';
+import { useSelectedTVShows } from '../../contexts/SelectedTVShowsContext';
+import useTVShowById from '../services/useTVShowById';
 
-function PlayButtons({ iconClass, movieId }) {
+function PlayButtons({ iconClass, movieId, tvShowId }) {
   const [trailerUrl, setTrailerUrl] = useState(null);
-  const { toggleHeartState, heartStates } = useSelectedMovies();
+
+  const {
+    toggleHeartState: toggleMovieHeartState,
+    heartStates: movieHeartStates,
+  } = useSelectedMovies();
+
+  const {
+    toggleHeartState: toggleTVShowHeartState,
+    heartStates: tvShowHeartStates,
+  } = useSelectedTVShows();
+
   const { id } = useParams();
-  const { movie, trailerKey } = useMovieById(id || movieId);
   const location = useLocation();
   const iframeRef = useRef(null);
+
+  const isTVShow = location.pathname.includes('tv');
+  const contentId = id || (isTVShow ? tvShowId : movieId);
+
+  const { movie, trailerKey: movieTrailerKey } = useMovieById(
+    !isTVShow ? contentId : null,
+  );
+  const { tvShow, trailerKey: tvShowTrailerKey } = useTVShowById(
+    isTVShow ? contentId : null,
+  );
+
+  const content = isTVShow ? tvShow : movie;
+  const trailerKey = isTVShow ? tvShowTrailerKey : movieTrailerKey;
+  const toggleHeartState = isTVShow
+    ? toggleTVShowHeartState
+    : toggleMovieHeartState;
+  const heartStates = isTVShow ? tvShowHeartStates : movieHeartStates;
+
+  useEffect(() => {
+    console.log('TV Show:', tvShow);
+    console.log('Movie:', movie);
+    console.log('Content:', content);
+  }, [tvShow, movie, content]);
 
   useEffect(() => {
     const closeIframeOnEscape = (event) => {
@@ -40,18 +74,20 @@ function PlayButtons({ iconClass, movieId }) {
     };
   }, []);
 
-  const handleToggleHeartState = (movie) => {
-    const isMovieInFavorites = heartStates[movie.id];
-    toggleHeartState(movie);
+  const handleToggleHeartState = () => {
+    if (content) {
+      const isContentInFavorites = heartStates[content.id];
+      toggleHeartState(content);
 
-    const toastMessage = isMovieInFavorites
-      ? `${movie.title} removed from your list`
-      : `${movie.title} added to your list`;
+      const toastMessage = isContentInFavorites
+        ? `${content.name || content.title} removed from your list`
+        : `${content.name || content.title} added to your list`;
 
-    if (isMovieInFavorites) {
-      toast.error(toastMessage);
-    } else {
-      toast.success(toastMessage);
+      if (isContentInFavorites) {
+        toast.error(toastMessage);
+      } else {
+        toast.success(toastMessage);
+      }
     }
   };
 
@@ -59,13 +95,13 @@ function PlayButtons({ iconClass, movieId }) {
     if (trailerKey) {
       setTrailerUrl(`https://www.youtube.com/embed/${trailerKey}`);
     } else {
-      toast.error('No Trailer for this movie.');
+      toast.error('No Trailer for this content.');
     }
   };
 
   return (
     <div className="float-end mt-2 flex justify-center font-truculenta text-white">
-      <Toaster position="top-center" reverseOrder={false} width />
+      <Toaster position="top-center" reverseOrder={false} />
       <div className="block">
         <button
           className="watch-trailer-button flex rounded-full border-2 bg-white text-black hover:bg-gray-200"
@@ -82,7 +118,7 @@ function PlayButtons({ iconClass, movieId }) {
             <div ref={iframeRef}>
               <iframe
                 title="Trailer"
-                width="900 "
+                width="900"
                 height="507"
                 src={trailerUrl}
                 frameBorder="0"
@@ -92,18 +128,17 @@ function PlayButtons({ iconClass, movieId }) {
           </div>
         )}
       </div>
-      {/* {location.pathname !== '/' && ( */}
       <div className="block duration-700">
-        {iconClass === 'tabler:circle-check-filled' ? (
+        {heartStates[content?.id] ? (
           <button
-            className="mx-3 flex  rounded-full border-2 border-gray-800 border-opacity-60 bg-gray-800 bg-opacity-60 text-nfRed"
-            onClick={() => handleToggleHeartState(movie)}
+            className="mx-3 flex rounded-full border-2 border-gray-800 border-opacity-60 bg-gray-800 bg-opacity-60 text-nfRed"
+            onClick={handleToggleHeartState}
           >
-            <p className=" my-auto w-fit justify-between py-1 pl-4 font-semibold">
+            <p className="my-auto w-fit justify-between py-1 pl-4 font-semibold">
               On List
             </p>
             <Icon
-              icon={iconClass}
+              icon="tabler:circle-check-filled"
               height="40"
               width="70"
               className="p-2 pl-0 text-nfRed"
@@ -112,13 +147,13 @@ function PlayButtons({ iconClass, movieId }) {
         ) : (
           <button
             className="mx-3 flex rounded-full border-2 bg-white text-black hover:bg-gray-200"
-            onClick={() => handleToggleHeartState(movie)}
+            onClick={handleToggleHeartState}
           >
-            <p className=" my-auto w-fit justify-between py-1 pl-4 font-semibold">
+            <p className="my-auto w-fit justify-between py-1 pl-4 font-semibold">
               Add to List
             </p>
             <Icon
-              icon={iconClass}
+              icon="heroicons-solid:plus"
               height="40"
               width="70"
               className="p-2 pl-0"
@@ -126,7 +161,6 @@ function PlayButtons({ iconClass, movieId }) {
           </button>
         )}
       </div>
-      {/* )} */}
     </div>
   );
 }

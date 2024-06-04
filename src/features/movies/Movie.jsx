@@ -49,6 +49,10 @@ function Movie() {
     sortedMovies.sort((a, b) => b.vote_average - a.vote_average);
     return sortedMovies;
   }; */
+  useEffect(() => {
+    // Reset selectedGenres to an empty array when the component mounts
+    setSearchQuery('');
+  }, []);
 
   useEffect(() => {
     // Save currentPage to localStorage whenever it changes
@@ -84,6 +88,11 @@ function Movie() {
     }
   };
 
+  // Handlers for filter changes
+  const handleResetPageNumber = () => {
+    setCurrentPage(1);
+  };
+
   const { heartStates, toggleHeartState } = useSelectedMovies();
 
   const handleToggleHeartState = (movie) => {
@@ -109,47 +118,59 @@ function Movie() {
         className={` left-2 top-16 z-50 mr-auto transition-all duration-700 `}
       >
         {!isFilterClicked ? (
-          <Icon
-            icon="line-md:filter-twotone"
-            height="30"
-            width="30"
-            className={`absolute z-50 m-1 text-nfRed transition-all duration-100 `}
+          <div
+            className="relative z-50 ml-4 mt-4 flex h-10 w-28 cursor-pointer rounded-lg border-2 border-white text-white transition-all duration-100 hover:border-nfRed hover:text-nfRed"
             onClick={() => setIsFilterClicked(!isFilterClicked)}
-          />
+          >
+            <Icon
+              icon="line-md:filter-twotone"
+              height="30"
+              width="30"
+              className={`absolute  m-1   `}
+            />
+
+            <span className=" absolute ml-9 mt-1 font-truculenta text-xl font-semibold uppercase ">
+              Filter
+            </span>
+          </div>
         ) : (
           <Icon
             icon="mdi:close"
             height="28"
             width="28"
-            className="fixed left-2 z-50 inline
-         cursor-pointer rounded-full bg-black bg-opacity-50 text-white"
+            className="fixed left-2 z-50 inline 
+          cursor-pointer rounded-full bg-black bg-opacity-50 text-white"
             onClick={() => setIsFilterClicked(!isFilterClicked)}
           />
         )}
       </button>
+
       <div
-        className={`fixed bottom-0 top-16 z-10 h-dvh w-80 bg-[#0d0c0c8d] bg-opacity-70 text-center transition-all duration-1000 ${
-          isFilterClicked ? 'left-0' : '-left-80'
+        className={`fixed bottom-0 top-16 z-10 !h-dvh w-[23rem] bg-[#0d0c0c8d] bg-opacity-70 text-center transition-all duration-1000 ${
+          isFilterClicked ? 'left-0' : '-left-[23rem]'
         }`}
         ref={filterRef} // Assign the ref to the filter and sort section
       >
         {isFilterClicked && (
-          <div className="mt-8">
-            <FilterAndSort
-              // isSortedByRating={isSortedByRating}
-              setIsSortedByRating={setIsSortedByRating}
-              // isSortedByDateAscending={isSortedByDateAscending}
-              setIsSortedByDateAscending={setIsSortedByDateAscending}
-              // isSortedByDateDescending={isSortedByDateDescending}
-              setIsSortedByDateDescending={setIsSortedByDateDescending}
-            />
-          </div>
+          <>
+            <div className="mt-8   ">
+              <FilterAndSort
+                // isSortedByRating={isSortedByRating}
+                setIsSortedByRating={setIsSortedByRating}
+                // isSortedByDateAscending={isSortedByDateAscending}
+                setIsSortedByDateAscending={setIsSortedByDateAscending}
+                // isSortedByDateDescending={isSortedByDateDescending}
+                setIsSortedByDateDescending={setIsSortedByDateDescending}
+                handleResetPageNumber={handleResetPageNumber}
+              />
+            </div>
+          </>
         )}
       </div>
 
       <div
         className={`relative mx-auto grid grid-cols-5 gap-8 pt-14 font-truculenta ${
-          isFilterClicked ? 'pointer-events-none opacity-40' : ''
+          isFilterClicked ? 'pointer-events-none mt-9 opacity-40' : ''
         }`}
       >
         {

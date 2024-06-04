@@ -7,6 +7,9 @@ const SortPreferencesContext = createContext();
 export const useSortPreferences = () => useContext(SortPreferencesContext);
 
 export const SortPreferencesProvider = ({ children }) => {
+  const [selectedGenres, setSelectedGenres] = useState([]);
+  const [selectedTVGenres, setSelectedTVGenres] = useState([]);
+
   const [isSortedByRating, setIsSortedByRating] = useState(
     localStorage.getItem('isSortedByRating') === 'true' || false,
   );
@@ -30,6 +33,10 @@ export const SortPreferencesProvider = ({ children }) => {
         isSortedByDateAscending,
         isSortedByDateDescending,
         setSortingPreferences,
+        selectedGenres,
+        setSelectedGenres,
+        selectedTVGenres,
+        setSelectedTVGenres,
       }}
     >
       {children}

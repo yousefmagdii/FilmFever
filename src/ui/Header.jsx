@@ -4,6 +4,7 @@ import useMovies from '../features/movies/useMovies';
 import { useEffect, useRef, useState } from 'react';
 import SearchBox from './SearchBox';
 import { useSearchQuery } from '../contexts/SearchQueryContext';
+import useTVShows from '../features/tvshows/useTVShows';
 
 function Header() {
   const [showSearchBox, setShowSearchBox] = useState(false);
@@ -14,10 +15,15 @@ function Header() {
   const [inputValue, setInputValue] = useState('');
 
   const { movies } = useMovies(searchQuery);
-
+  const { tvshows } = useTVShows(searchQuery);
   const filteredMovies = movies.filter((movie) =>
     movie.title.toLowerCase().includes(searchQuery.toLowerCase()),
   );
+  // console.log('searchedTVSHOWS', tvshows);
+
+  // const filteredTVShows = tvshows.filter((tvshow) =>
+  //   tvshow.title.toLowerCase().includes(searchQuery.toLowerCase()),
+  // );
 
   const handleInputChange = (e) => {
     setSearchQuery(e.target.value);
@@ -61,12 +67,16 @@ function Header() {
                 Movies
               </li>
             </Link>
-            <Link to="/" className="m-auto rounded-3xl hover:text-nfRed">
-              <li className="p-2">Tv Shows</li>
+            <Link to="/tvshows" className="m-auto rounded-3xl hover:text-nfRed">
+              <li
+                className={`p-2 ${location.pathname === '/tvshows' ? '!text-nfRed' : ''}`}
+              >
+                Tv Shows
+              </li>
             </Link>
-            <Link to="/" className="m-auto rounded-3xl hover:text-nfRed">
+            {/* <Link to="/" className="m-auto rounded-3xl hover:text-nfRed">
               <li className="p-2">Documentaries</li>
-            </Link>
+            </Link> */}
             <Link to="/list" className="m-auto rounded-3xl hover:text-nfRed">
               <li
                 className={`p-2 ${location.pathname === '/list' ? '!text-nfRed' : ''}`}

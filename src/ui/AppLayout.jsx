@@ -38,16 +38,18 @@ function AppLayout() {
 
   // Check if selectedMovie and its images property are defined before accessing
   const backgroundImageUrl =
-    location.pathname === '/' && selectedMovie && selectedMovie.backdrop_path
-      ? `url('https://image.tmdb.org/t/p/original${selectedMovie.backdrop_path}')`
-      : 'url(https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)'; // Default background image URL
+    location.pathname === '/' &&
+    selectedMovie &&
+    selectedMovie.backdrop_path &&
+    `url('https://image.tmdb.org/t/p/original${selectedMovie.backdrop_path}')`;
+  // : 'url(https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)'; // Default background image URL
 
   if (isLoading) return <FilmReelSpinner />;
   return (
     <>
       <div
         className={`bg-image ${
-          location.pathname === '/movies'
+          location.pathname === '/movies' || location.pathname === '/tvshows'
             ? '!h-full w-full bg-opacity-0'
             : 'overflow-hidden'
         }`}
@@ -76,7 +78,7 @@ function AppLayout() {
           src={`https://image.tmdb.org/t/p/original${movies[0].poster_path}`}
           alt=""
         /> */}
-        <div className=" relative">
+        <div className=" relative ">
           <main>
             <Outlet />
           </main>

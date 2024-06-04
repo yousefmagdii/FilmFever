@@ -70,7 +70,7 @@ function Home() {
       // }}
     >
       <MovieInfo />
-      <div className="absolute  bottom-4 right-3 flex !h-96 w-[50%] items-center justify-center overflow-hidden">
+      <div className="absolute  bottom-12 right-12 flex !h-96 w-[50%] items-center justify-center overflow-hidden">
         <button
           className="absolute left-0 top-1/2 z-10 -translate-y-1/2 transform  rounded-full bg-white   text-nfRed active:bg-black active:text-white"
           onClick={() => moveCarousel('prev')}

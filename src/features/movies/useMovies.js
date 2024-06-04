@@ -30,6 +30,8 @@ function useMovies(searchQuery = '') {
     // setIsSortedByRating,
     // setIsSortedByDateAscending,
     // setIsSortedByDateDescending,
+    selectedGenres,
+    setSelectedGenres,
   } = useSortPreferences();
 
   const [movies, setMovies] = useState([]);
@@ -37,7 +39,7 @@ function useMovies(searchQuery = '') {
   const [error, setError] = useState('');
   const [totalPages, setTotalPages] = useState(1);
 
-  const { currentPage } = useCurrentPage();
+  const { currentPage, setCurrentPage } = useCurrentPage();
 
   const saveSortingPreferences = () => {
     localStorage.setItem('isSortedByRating', isSortedByRating);
@@ -59,6 +61,7 @@ function useMovies(searchQuery = '') {
   }
 
   console.log('sortBy', sortBy);
+  console.log('selectedGenres', selectedGenres);
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -73,6 +76,12 @@ function useMovies(searchQuery = '') {
         if (searchQuery) {
           url = `${API_URL}/search/movie?api_key=${API_KEY}&query=${searchQuery}&page=${currentPage}`;
         }
+        // Check if selectedGenres array has genres
+        if (selectedGenres.length > 0) {
+          const genresQuery = selectedGenres.join(',');
+          url += `&with_genres=${genresQuery}`;
+        }
+        console.log('Selected genres in API request', selectedGenres);
 
         const response = await fetch(url);
 
@@ -118,7 +127,7 @@ function useMovies(searchQuery = '') {
     };
 
     fetchMovies();
-  }, [currentPage, searchQuery, sortBy]); // Include sortBy in the dependencies array
+  }, [currentPage, searchQuery, sortBy, selectedGenres, setCurrentPage]); // Include sortBy in the dependencies array
 
   return {
     movies,
@@ -132,6 +141,8 @@ function useMovies(searchQuery = '') {
     // setIsSortedByDateAscending,
     isSortedByDateDescending,
     // setIsSortedByDateDescending,
+    selectedGenres,
+    setSelectedGenres,
   };
 }
 

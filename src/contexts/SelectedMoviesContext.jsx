@@ -23,7 +23,7 @@ export const SelectedMoviesProvider = ({ children }) => {
     }));
 
     setSelectedMovies((prevSelectedMovies) => {
-      console.log(movie.id);
+      // console.log(movie.id);
       const isMovieSelected = prevSelectedMovies.some(
         (selectedMovie) => selectedMovie.id === movie.id,
       );

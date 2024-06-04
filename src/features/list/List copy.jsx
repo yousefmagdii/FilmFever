@@ -1,6 +1,5 @@
 import { Icon } from '@iconify/react';
 import { useSelectedMovies } from '../../contexts/SelectedMoviesContext';
-import PlayButtons from '../home/PlayButtons';
 
 function List() {
   const { selectedMovies } = useSelectedMovies();

@@ -1,29 +1,32 @@
 import { useContext } from 'react';
 import { useSortPreferences } from '../contexts/SortPreferencesContext';
+import { useCurrentPage } from '../contexts/CurrentPageContext';
 
-function OrderBy(
-  {
-    // isSortedByRating,
-    // setIsSortedByRating,
-    // isSortedByDateAscending,
-    // setIsSortedByDateAscending,
-    // isSortedByDateDescending,
-    // setIsSortedByDateDescending,
-  },
-) {
+function OrderBy({
+  // isSortedByRating,
+  // setIsSortedByRating,
+  // isSortedByDateAscending,
+  // setIsSortedByDateAscending,
+  // isSortedByDateDescending,
+  // setIsSortedByDateDescending,
+  handleResetPageNumber,
+}) {
   const {
     isSortedByRating,
     isSortedByDateAscending,
     isSortedByDateDescending,
     setSortingPreferences,
   } = useSortPreferences();
+
   // console.log('isSortedByRating', isSortedByRating);
+
   const handleRatingClick = () => {
     if (isSortedByRating) {
       setSortingPreferences(false, false, false);
     } else {
       setSortingPreferences(true, false, false);
     }
+    handleResetPageNumber();
   };
 
   const handleDateAscendingClick = () => {
@@ -32,6 +35,7 @@ function OrderBy(
     } else {
       setSortingPreferences(false, true, false);
     }
+    handleResetPageNumber();
   };
 
   const handleDateDescendingClick = () => {
@@ -40,6 +44,7 @@ function OrderBy(
     } else {
       setSortingPreferences(false, false, true);
     }
+    handleResetPageNumber();
   };
 
   return (
@@ -49,7 +54,7 @@ function OrderBy(
         className={`m-1   border-2 bg-opacity-0  p-2 text-xs font-bold text-white  
          hover:bg-nfRed hover:bg-opacity-30 hover:text-white ${isSortedByRating ? 'bg-nfRed bg-opacity-60 !text-white' : ''}`}
       >
-        Rating
+        Top Rated
       </button>
       <button
         onClick={handleDateDescendingClick}

@@ -1,6 +1,7 @@
 import { Icon } from '@iconify/react';
 import OrderBy from './OrderBy';
 import GenresFilter from './GenresFilter';
+import { useCurrentPage } from '../contexts/CurrentPageContext';
 
 function FilterAndSort({
   setIsFilterClicked,
@@ -11,7 +12,12 @@ function FilterAndSort({
   // setIsSortedByDateAscending,
   isSortedByDateDescending,
   // setIsSortedByDateDescending,
+  // handleResetPageNumber,
 }) {
+  const { currentPage, setCurrentPage } = useCurrentPage();
+  const handleResetPageNumber = () => {
+    setCurrentPage(1);
+  };
   return (
     <>
       {/* <div
@@ -28,12 +34,13 @@ function FilterAndSort({
         // setIsSortedByDateAscending={setIsSortedByDateAscending}
         isSortedByDateDescending={isSortedByDateDescending}
         // setIsSortedByDateDescending={setIsSortedByDateDescending}
+        handleResetPageNumber={handleResetPageNumber}
       />
 
       <h2 className="mt-8  font-truculenta text-2xl font-bold text-white">
         Genres
       </h2>
-      <GenresFilter />
+      <GenresFilter handleResetPageNumber={handleResetPageNumber} />
     </>
   );
 }
