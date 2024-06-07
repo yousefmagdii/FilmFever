@@ -13,7 +13,7 @@ function Movie() {
     return storedStates ? JSON.parse(storedStates) : {};
   });
   const { selectedMovies, setSelectedMovies } = useSelectedMovies();
-  console.log(selectedMovies);
+
   useEffect(() => {
     const initialHeartStates = {};
     movies.forEach((movie) => {

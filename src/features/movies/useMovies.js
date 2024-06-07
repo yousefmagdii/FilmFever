@@ -60,9 +60,6 @@ function useMovies(searchQuery = '') {
     sortBy = 'release_date.desc';
   }
 
-  console.log('sortBy', sortBy);
-  console.log('selectedGenres', selectedGenres);
-
   useEffect(() => {
     const fetchMovies = async () => {
       setIsLoading(true);
@@ -81,7 +78,6 @@ function useMovies(searchQuery = '') {
           const genresQuery = selectedGenres.join(',');
           url += `&with_genres=${genresQuery}`;
         }
-        console.log('Selected genres in API request', selectedGenres);
 
         const response = await fetch(url);
 
@@ -108,11 +104,11 @@ function useMovies(searchQuery = '') {
 
             const trailersData = await trailersResponse.json();
             const reviewsData = await reviewsResponse.json();
-
             return {
               ...movie,
               trailers: trailersData.results,
               reviews: reviewsData.results,
+              media_type: 'movie',
             };
           }),
         );

@@ -1,20 +1,17 @@
 import { useParams } from 'react-router-dom';
-import { useSelectedShows } from '../../contexts/SelectedShowsContext'; // Import the context for selected TV shows
+import { useSelectedShows } from '../../contexts/SelectedShowsContext';
 import { Icon } from '@iconify/react';
-import useTVShowById from '../services/useTVShowById'; // Import the hook to fetch TV show details
+import useTVShowById from '../services/useTVShowById';
 import { useEffect } from 'react';
 import FilmReelSpinner from '../../ui/Spinner';
 import PlayButtons from '../home/PlayButtons';
 
 function TVShowInfo() {
   const { id } = useParams();
-  const { selectedShows } = useSelectedShows(); // Use the context for selected TV shows
-  console.log('selectedShows', selectedShows);
-  const { tvShow, loading, error } = useTVShowById(id); // Fetch TV show details by ID
-  console.log(tvShow, 'tvshow');
-  useEffect(() => {
-    // You can add any side effects related to this component here
-  }, [id]); // Ensure the side effect runs whenever the ID changes
+  const { selectedShows } = useSelectedShows();
+
+  const { tvShow, loading, error } = useTVShowById(id);
+  useEffect(() => {}, [id]);
 
   if (error) {
     return <div>Error: {error}</div>;
@@ -35,11 +32,11 @@ function TVShowInfo() {
     last_air_date,
     status,
     episode_run_time,
+    seasons,
   } = tvShow;
-
+  // console.log(tvShow);
   return (
     <>
-      {/* Add similar background and layout as the MovieInfo component */}
       <div
         className="relative z-0 h-dvh overflow-hidden"
         style={{
@@ -85,17 +82,21 @@ function TVShowInfo() {
                     className="ml-1"
                   />
                 </span>
-
-                {/* episode_run_time */}
               </span>
             )}
             {episode_run_time > 0 && (
               <span className="flex w-full">
-                <span className="font-bold">Duration:&#160; </span>
+                <span className="font-bold">Episode duration:&#160; </span>
                 {episode_run_time} minutes
               </span>
             )}
-            {/* Add any additional UI elements specific to TV shows */}
+            {seasons.length > 0 && (
+              <span className="flex w-full">
+                <span className="font-bold uppercase">
+                  {seasons.length} {seasons.length === 1 ? 'season' : 'seasons'}{' '}
+                </span>
+              </span>
+            )}
             <div className="float-left mt-3">
               <PlayButtons
                 iconClass={
@@ -104,8 +105,6 @@ function TVShowInfo() {
                     : 'heroicons-solid:plus'
                 }
               />
-              {/* heroicons-solid:plus */}
-              {/* tabler:circle-check-filled */}
             </div>
           </div>
           <span className="relative my-auto ">
@@ -117,8 +116,11 @@ function TVShowInfo() {
               />
             )}
             <span className="absolute bottom-0 left-0 right-0 bg-gray-600 bg-opacity-40 text-center font-madimi text-xl font-extrabold text-white">
-              {first_air_date.split('-')[0]} -{' '}
-              {status === 'Ended' && last_air_date.split('-')[0]}
+              {first_air_date.split('-')[0]}
+              {status !== 'Ended' && ' - '}
+              {status === 'Ended' &&
+                first_air_date.split('-')[0] !== last_air_date.split('-')[0] &&
+                -last_air_date.split('-')[0]}
             </span>
           </span>
         </span>

@@ -14,7 +14,7 @@ async function useMovie(id) {
 
       try {
         let url = `${API_URL}/movie/${id}?api_key=${API_KEY}`;
-        console.log('Fetching movie from:', url); // Log API URL
+
         const response = await fetch(url);
 
         if (!response.ok) {
@@ -22,7 +22,7 @@ async function useMovie(id) {
         }
 
         const data = await response.json();
-        console.log('Fetched movie data:', data); // Log fetched data
+
         setMovie(data);
         setIsLoading(false);
       } catch (error) {

@@ -8,7 +8,7 @@ import useMovieById from '../services/useMovieById';
 import { useSelectedTVShows } from '../../contexts/SelectedTVShowsContext';
 import useTVShowById from '../services/useTVShowById';
 
-function PlayButtons({ iconClass, movieId, tvShowId }) {
+function PlayButtons({ iconClass, movieId, tvShowId, mediaType }) {
   const [trailerUrl, setTrailerUrl] = useState(null);
 
   const {
@@ -25,7 +25,7 @@ function PlayButtons({ iconClass, movieId, tvShowId }) {
   const location = useLocation();
   const iframeRef = useRef(null);
 
-  const isTVShow = location.pathname.includes('tv');
+  const isTVShow = location.pathname.includes('tv') || mediaType === 'show';
   const contentId = id || (isTVShow ? tvShowId : movieId);
 
   const { movie, trailerKey: movieTrailerKey } = useMovieById(
@@ -42,11 +42,11 @@ function PlayButtons({ iconClass, movieId, tvShowId }) {
     : toggleMovieHeartState;
   const heartStates = isTVShow ? tvShowHeartStates : movieHeartStates;
 
-  useEffect(() => {
-    console.log('TV Show:', tvShow);
-    console.log('Movie:', movie);
-    console.log('Content:', content);
-  }, [tvShow, movie, content]);
+  // useEffect(() => {
+  //   console.log('TV Show:', tvShow);
+  //   console.log('Movie:', movie);
+  //   console.log('Content:', content);
+  // }, [tvShow, movie, content]);
 
   useEffect(() => {
     const closeIframeOnEscape = (event) => {

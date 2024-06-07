@@ -66,7 +66,6 @@ function MovieInfo() {
     vote_average,
     backdrop_path,
   } = selectedMovie;
-  // console.log(genre_ids);
   return (
     <>
       <div

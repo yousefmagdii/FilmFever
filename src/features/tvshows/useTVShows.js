@@ -47,9 +47,6 @@ function useTVShows(searchQuery = '') {
     sortBy = 'first_air_date.desc';
   }
 
-  console.log('sortBy', sortBy);
-  console.log('selectedTVGenres', selectedTVGenres);
-
   useEffect(() => {
     const fetchShows = async () => {
       setIsLoading(true);
@@ -68,7 +65,6 @@ function useTVShows(searchQuery = '') {
           const genresQuery = selectedTVGenres.join(',');
           url += `&with_genres=${genresQuery}`;
         }
-        console.log('Selected genres in API request', selectedTVGenres);
 
         const response = await fetch(url);
 
@@ -100,10 +96,11 @@ function useTVShows(searchQuery = '') {
               ...show,
               trailers: trailersData.results,
               reviews: reviewsData.results,
+              media_type: 'tvshow',
             };
           }),
         );
-
+        // console.log(tvshows, 'tvshows');
         setShows(showsWithTrailersAndReviews);
         setTotalPages(data.total_pages);
         setIsLoading(false);

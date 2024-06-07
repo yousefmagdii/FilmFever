@@ -6,10 +6,11 @@ import { updateSelectedImage } from './homeSlice';
 import MovieInfo from './MovieInfo';
 import useMovies from '../movies/useMovies';
 import FilmReelSpinner from '../../ui/Spinner';
+import useTVShows from '../tvshows/useTVShows';
 
 function Home() {
-  const { movies, isLoading } = useMovies();
-  console.log(movies);
+  const { movies, isLoading: isLoadingMovies } = useMovies();
+  const { shows, isLoading: isLoadingTVShows } = useTVShows();
 
   const [selectedImageIndex, setSelectedImageIndex] = useState(2);
 
@@ -39,11 +40,15 @@ function Home() {
     setSelectedImageIndex(newIndex);
   };
 
-  // console.log(selectedImageIndex);
   // Concatenate all images from all movies into a single array
-  const allImages = movies.flatMap((movie) => movie.poster_path);
+  const allMoviesImages = movies.flatMap((movie) => movie.poster_path);
+  const allTVShowsImages = shows.flatMap((show) => show.poster_path);
 
-  // Determine the range of images to display in the carousel
+  const allImage = [...allMoviesImages, ...allTVShowsImages];
+  const allImages = allMoviesImages.flatMap((movie, index) => {
+    const tvShow = allTVShowsImages[index];
+    return tvShow ? [tvShow, movie] : [movie];
+  });
   // Determine the range of images to display in the carousel
   let startIndex, endIndex;
   if (endIndex - startIndex === 2) {
@@ -61,7 +66,7 @@ function Home() {
         ? allImages.length - 1
         : startIndex + 3;
   }
-  if (isLoading) return <FilmReelSpinner />;
+  if (isLoadingMovies || isLoadingTVShows) return <FilmReelSpinner />;
   return (
     <div
       className="!h-dvh overflow-hidden"

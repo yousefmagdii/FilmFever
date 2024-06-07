@@ -1,29 +1,17 @@
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useSelectedMovies } from '../../contexts/SelectedMoviesContext';
 import PlayButtons from '../home/PlayButtons';
 import { Icon } from '@iconify/react';
-import useMovies, {
-  useMoviesWithSearch,
-  useMoviesWithoutSearch,
-} from '../movies/useMovies';
-import { useEffect, useState } from 'react';
-import { useSearchQuery } from '../../contexts/SearchQueryContext';
 import FilmReelSpinner from '../../ui/Spinner';
-// import useMovie from '../services/useMovie';
 import useMovieById from '../services/useMovieById';
 const API_KEY = '5bd0066ae9f9e2c1b2f8e7442247c890';
 
 function MovieInfo() {
   const { id } = useParams();
-  console.log(id);
+
   const { selectedMovies } = useSelectedMovies();
-  // console.log('selectedMovies', selectedMovies);
-  // const { movie, isLoading, error } = useMovie(id);
+
   const { movie, loading, error } = useMovieById(id);
-  // console.log('trailerKey', trailerKey);
-  // genres.push(movie?.genres);
-  // console.log(movie?.genres);
-  // console.log('MovieUn', movie);
 
   if (error) {
     return <div>Error: {error}</div>;
@@ -37,13 +25,13 @@ function MovieInfo() {
     poster_path,
     overview,
     release_date,
-    genres,
+
     vote_average,
     backdrop_path,
     title,
     runtime,
   } = movie;
-  // console.log(genre_ids);
+
   return (
     <>
       <div
@@ -107,8 +95,6 @@ function MovieInfo() {
                     : 'heroicons-solid:plus'
                 }
               />
-              {/* heroicons-solid:plus */}
-              {/* tabler:circle-check-filled */}
             </div>
           </div>
           <span className="relative my-auto ">

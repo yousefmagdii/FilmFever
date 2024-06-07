@@ -15,15 +15,24 @@ function Header() {
   const [inputValue, setInputValue] = useState('');
 
   const { movies } = useMovies(searchQuery);
-  const { tvshows } = useTVShows(searchQuery);
-  const filteredMovies = movies.filter((movie) =>
-    movie.title.toLowerCase().includes(searchQuery.toLowerCase()),
+  const { shows } = useTVShows(searchQuery);
+  // console.log(shows, 'shows');
+  // console.log(movies, 'movies');
+  const filteredTvShows = shows.filter(
+    (show) =>
+      show?.name?.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      show?.poster_path,
   );
-  // console.log('searchedTVSHOWS', tvshows);
+  // console.log(filteredTvShows, 'filteredTvShows');
 
-  // const filteredTVShows = tvshows.filter((tvshow) =>
-  //   tvshow.title.toLowerCase().includes(searchQuery.toLowerCase()),
-  // );
+  const filteredMovies = movies.filter(
+    (movie) =>
+      movie?.title?.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      movie?.poster_path,
+  );
+  // console.log(filteredMovies, 'filteredMovies');
+  // console.log('tbbs', shows);
+  // console.log('movies', movies);
 
   const handleInputChange = (e) => {
     setSearchQuery(e.target.value);
@@ -112,6 +121,7 @@ function Header() {
             setShowSearchBox={setShowSearchBox}
             setInputValue={setInputValue}
             setSearchQuery={setSearchQuery}
+            filteredTvShows={filteredTvShows}
           />
         </div>
       )}

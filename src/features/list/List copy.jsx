@@ -3,7 +3,6 @@ import { useSelectedMovies } from '../../contexts/SelectedMoviesContext';
 
 function List() {
   const { selectedMovies } = useSelectedMovies();
-  console.log(selectedMovies);
   return (
     <div>
       <ul className="mt-2 grid h-dvh grid-cols-6 justify-center gap-4  font-truculenta text-lg font-bold">

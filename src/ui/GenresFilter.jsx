@@ -50,6 +50,9 @@ function GenresFilter({ handleResetPageNumber }) {
 
   const location = useLocation();
 
+  const { selectedGenres = [], setSelectedGenres } = useMovies() || {};
+  const { selectedTVGenres = [], setSelectedTVGenres } = useTVShows() || {};
+
   useEffect(() => {
     // Determine the selected type based on the pathname
     if (location.pathname === '/tvshows') {
@@ -57,16 +60,26 @@ function GenresFilter({ handleResetPageNumber }) {
     } else if (location.pathname === '/movies') {
       setSelectedType('movie');
     }
-  }, [location.pathname]);
-
-  const { selectedGenres = [], setSelectedGenres } = useMovies() || {};
-  const { selectedTVGenres = [], setSelectedTVGenres } = useTVShows() || {};
+  }, [location.pathname, setSelectedGenres]);
 
   const clickOnGenre = (genreId) => {
     if (selectedType === 'movie') {
       handleGenreSelection(selectedGenres, setSelectedGenres, genreId);
     } else if (selectedType === 'tv') {
       handleGenreSelection(selectedTVGenres, setSelectedTVGenres, genreId);
+    }
+  };
+  const handleResetGenres = () => {
+    if (selectedType === 'movie') {
+      if (selectedGenres.length > 0) {
+        setSelectedGenres([]);
+        toast.success('Genres reset successfully');
+      } else toast.error('No genres selected');
+    } else if (selectedType === 'tv') {
+      if (selectedTVGenres.length > 0) {
+        setSelectedTVGenres([]);
+        toast.success('Genres reset successfully');
+      } else toast.error('No genres selected');
     }
   };
 
@@ -93,8 +106,8 @@ function GenresFilter({ handleResetPageNumber }) {
                 key={genre.id}
                 onClick={() => clickOnGenre(genre.id)}
                 className={`mx-1 my-1 rounded-lg bg-opacity-0 px-1 py-1 text-xs font-bold text-white duration-500 
-        hover:bg-white hover:bg-opacity-60
-        hover:text-nfRed ${selectedGenres.includes(genre.id) ? 'scale-125 !text-nfRed ' : ''}`}
+               hover:bg-white hover:bg-opacity-60
+               hover:text-nfRed ${selectedGenres.includes(genre.id) ? 'scale-125 !text-nfRed ' : ''}`}
               >
                 {genre.name}
               </button>
@@ -111,8 +124,12 @@ function GenresFilter({ handleResetPageNumber }) {
               </button>
             ))}
       </div>
-      <button className="mt-2 w-[60%] border-[1px] bg-nfRed p-3 font-truculenta text-base font-bold text-white duration-700 hover:scale-110 hover:bg-opacity-80">
-        Apply Filter
+      <button
+        className="mt-2 w-[60%] border-[1px] bg-nfRed p-3 font-truculenta text-base font-bold
+       text-white duration-700 hover:scale-110 hover:bg-opacity-80"
+        onClick={handleResetGenres}
+      >
+        Reset Genres
       </button>
       <Toaster
         position="top-center"

@@ -23,17 +23,13 @@ export const SelectedMoviesProvider = ({ children }) => {
     }));
 
     setSelectedMovies((prevSelectedMovies) => {
-      // console.log(movie.id);
       const isMovieSelected = prevSelectedMovies.some(
         (selectedMovie) => selectedMovie.id === movie.id,
       );
 
       if (!isMovieSelected) {
-        // If the movie is not selected, add it to the list
-        //const movieToAdd = selectedMovies.find((m) => m.id === movie.id);
         return [...prevSelectedMovies, { ...movie, favorite: true }];
       } else {
-        // If the movie is already selected, remove it from the list
         return prevSelectedMovies.filter(
           (selectedMovie) => selectedMovie.id !== movie.id,
         );

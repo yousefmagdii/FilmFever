@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { useCurrentPage } from '../../contexts/CurrentPageContext';
 import { useSearchQuery } from '../../contexts/SearchQueryContext';
 import FilterAndSort from '../../ui/FilterAndSort';
+import FilmReelSpinner from '../../ui/Spinner';
 
 function Movie() {
   const [isFilterClicked, setIsFilterClicked] = useState(false);
@@ -17,38 +18,15 @@ function Movie() {
     isLoading,
     error,
     totalPages,
-    // isSortedByRating,
     setIsSortedByRating,
-    // isSortedByDateAscending,
     setIsSortedByDateAscending,
-    // isSortedByDateDescending,
     setIsSortedByDateDescending,
   } = useMovies();
 
-  console.log('mmm', movies);
-  //const sortedMovies = movies.sort((a, b) => b.vote_average - a.vote_average);
-  //console.log('sorted', sortedMovies);
   const { currentPage, setCurrentPage } = useCurrentPage();
   const filterRef = useRef(null);
   const overlayRef = useRef(null);
-  /*  const sortedMoviesByRating = [...movies];
-  const sortedMoviesByDateAsc = [...movies];
-  const sortedMoviesByDateDesc = [...movies];
-  sortedMoviesByRating.sort((a, b) => b.vote_average - a.vote_average);
-  sortedMoviesByDateAsc.sort(
-    (a, b) => new Date(a.release_date) - new Date(b.release_date),
-  );
-  console.log('sortedMoviesByDateAsc', sortedMoviesByDateAsc);
-  sortedMoviesByDateDesc.sort(
-    (a, b) => new Date(b.release_date) - new Date(a.release_date),
-  );
-  console.log('sortedMoviesByDateDesc', sortedMoviesByDateDesc); */
 
-  /*  const sortMoviesByRating = () => {
-    const sortedMovies = [...movies];
-    sortedMovies.sort((a, b) => b.vote_average - a.vote_average);
-    return sortedMovies;
-  }; */
   useEffect(() => {
     // Reset selectedGenres to an empty array when the component mounts
     setSearchQuery('');
@@ -109,7 +87,7 @@ function Movie() {
     }
   };
 
-  if (isLoading) return <Spinner />;
+  if (isLoading) return <FilmReelSpinner />;
   if (error) return <div>Error: {error}</div>;
 
   return (
@@ -144,7 +122,6 @@ function Movie() {
           />
         )}
       </button>
-
       <div
         className={`fixed bottom-0 top-16 z-10 !h-dvh w-[23rem] bg-[#0d0c0c8d] bg-opacity-70 text-center transition-all duration-1000 ${
           isFilterClicked ? 'left-0' : '-left-[23rem]'
@@ -167,75 +144,72 @@ function Movie() {
           </>
         )}
       </div>
-
       <div
-        className={`relative mx-auto grid grid-cols-5 gap-8 pt-14 font-truculenta ${
+        className={`relative mx-auto pt-14 font-truculenta ${
           isFilterClicked ? 'pointer-events-none mt-9 opacity-40' : ''
-        }`}
+        }  ${movies.length < 6 ? '!h-dvh overflow-hidden' : '!h-full'}`}
       >
-        {
-          /*  (isSortedByRating
-          ? sortedMoviesByRating
-          : isSortedByDateAscending
-            ? sortedMoviesByDateAsc
-            : isSortedByDateDescending
-              ? sortedMoviesByDateDesc
-              : movies
-        ) */
-          movies.map((movie, index) => (
-            <div
-              className={`group relative mx-auto flex w-fit cursor-pointer flex-col items-center `}
-              key={movie.id}
-            >
-              <Link
-                to={{
-                  pathname: `/movies/${movie.id}`,
-                  state: { movies, currentPage },
-                }}
+        {movies.length > 0 ? (
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+            {movies.map((movie, index) => (
+              <div
+                className={`group relative mx-auto flex w-fit cursor-pointer flex-col items-center `}
+                key={movie.id}
               >
-                <img
-                  src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                  alt={movie.title}
-                  className={`h-90 w-64 rounded-lg bg-cover object-cover ${
-                    isFilterClicked ? 'cursor-no-drop' : ''
-                  }`}
-                />
-              </Link>
-              <span className="absolute bottom-0 left-0 right-0 z-10 hidden bg-gradient-to-t from-[#121212ac] to-[#00000000] py-5 text-center font-bold text-orange-50 group-hover:block group-hover:rounded-b-lg group-hover:duration-700">
-                <span className="p-1">{movie.title}</span>
-              </span>
-              <button
-                className="absolute right-2 top-2 rounded-full bg-gray-800 bg-opacity-40 p-[0.10rem] "
-                onClick={() => handleToggleHeartState(movie)}
-              >
-                {!heartStates[movie.id] ? (
-                  <Icon
-                    icon="mdi:heart-outline"
-                    height="20"
-                    width="20"
-                    className="m-1"
-                    style={{
-                      color: '#fff',
-                      transition: 'color 0.3s ease',
-                    }}
+                <Link
+                  to={{
+                    pathname: `/movies/${movie.id}`,
+                    state: { movies, currentPage },
+                  }}
+                >
+                  <img
+                    src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                    alt={movie.title}
+                    className={`h-90 w-64 rounded-lg bg-cover object-cover ${
+                      isFilterClicked ? 'cursor-no-drop' : ''
+                    }`}
                   />
-                ) : (
-                  <Icon
-                    icon="mdi:heart"
-                    height="20"
-                    width="20"
-                    className="m-1"
-                    style={{
-                      color: '#E50914',
-                      transition: 'color 0.3s ease',
-                    }}
-                  />
-                )}
-                <Toaster position="top-center" reverseOrder={false} width />
-              </button>
-            </div>
-          ))
-        }
+                </Link>
+                <span className="absolute bottom-0 left-0 right-0 z-10 hidden bg-gradient-to-t from-[#121212ac] to-[#00000000] py-5 text-center font-bold text-orange-50 group-hover:block group-hover:rounded-b-lg group-hover:duration-700">
+                  <span className="p-1">{movie.title}</span>
+                </span>
+                <button
+                  className="absolute right-2 top-2 rounded-full bg-gray-800 bg-opacity-40 p-[0.10rem] "
+                  onClick={() => handleToggleHeartState(movie)}
+                >
+                  {!heartStates[movie.id] ? (
+                    <Icon
+                      icon="mdi:heart-outline"
+                      height="20"
+                      width="20"
+                      className="m-1"
+                      style={{
+                        color: '#fff',
+                        transition: 'color 0.3s ease',
+                      }}
+                    />
+                  ) : (
+                    <Icon
+                      icon="mdi:heart"
+                      height="20"
+                      width="20"
+                      className="m-1"
+                      style={{
+                        color: '#E50914',
+                        transition: 'color 0.3s ease',
+                      }}
+                    />
+                  )}
+                  <Toaster position="top-center" reverseOrder={false} width />
+                </button>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="flex h-screen items-center justify-center text-center text-4xl text-gray-200">
+            There are no Movies available please change the genres.
+          </div>
+        )}
         {/* Overlay to prevent clicking on the grid when the filter section is open */}
         {isFilterClicked && (
           <div
@@ -245,29 +219,37 @@ function Movie() {
           />
         )}
       </div>
-      <div className="mt-6 flex w-full justify-center pb-7 font-truculenta text-white ">
-        <button
-          onClick={handlePrevPage}
-          disabled={currentPage === 1}
-          className="ml-2 rounded-full bg-gray-300 bg-opacity-40 py-2 font-bold text-nfRed disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          <Icon icon="mdi:arrow-back" height="15" width="30" className="" />
-        </button>
-        <span className="mx-4 my-auto font-bold">
-          page{' '}
-          <span className="text-xl font-extrabold text-nfRed">
-            {currentPage}
-          </span>{' '}
-          out of {totalPages}
-        </span>
-        <button
-          onClick={handleNextPage}
-          disabled={currentPage === totalPages}
-          className="ml-2 rounded-full bg-gray-300 bg-opacity-40 py-2 font-bold text-nfRed"
-        >
-          <Icon icon="mdi:arrow-forward" height="15" width="30" className="" />
-        </button>
-      </div>
+      {/* Pagination */}
+      {movies.length > 0 && (
+        <div className="mt-6 flex w-full justify-center pb-7 font-truculenta text-white ">
+          <button
+            onClick={handlePrevPage}
+            disabled={currentPage === 1}
+            className="ml-2 rounded-full bg-gray-300 bg-opacity-40 py-2 font-bold text-nfRed disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <Icon icon="mdi:arrow-back" height="15" width="30" className="" />
+          </button>
+          <span className="mx-4 my-auto font-bold">
+            page{' '}
+            <span className="text-xl font-extrabold text-nfRed">
+              {currentPage}
+            </span>{' '}
+            out of {totalPages}
+          </span>
+          <button
+            onClick={handleNextPage}
+            disabled={currentPage === totalPages}
+            className="ml-2 rounded-full bg-gray-300 bg-opacity-40 py-2 font-bold text-nfRed"
+          >
+            <Icon
+              icon="mdi:arrow-forward"
+              height="15"
+              width="30"
+              className=""
+            />
+          </button>
+        </div>
+      )}
     </>
   );
 }

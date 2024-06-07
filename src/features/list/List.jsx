@@ -12,6 +12,7 @@ function List() {
   const { selectedMovies, removeMovie } = useSelectedMovies();
   const { selectedTVShows, removeShow } = useSelectedTVShows();
   const [selectedTrailer, setSelectedTrailer] = useState(null);
+
   const iframeRef = useRef(null);
   const [currentPage, setCurrentPage] = useState(() => {
     // Initially set to 'movies' if not set in localStorage or the value is invalid, otherwise get the value from localStorage
@@ -61,125 +62,136 @@ function List() {
   if (isLoading) return <FilmReelSpinner />;
   return (
     <div className="">
-      <div className="mx-auto my-4 flex w-fit justify-center bg-white bg-opacity-35  ">
+      <div className="mx-auto mb-12 mt-8 flex w-fit justify-center  bg-[#141414]  bg-opacity-35">
         <button
           onClick={() => handlePageChange('movies')}
-          className={` px-4 py-2 text-xs font-bold ${
+          className={`  px-4 py-2 text-xs font-bold ${
             currentPage === 'movies'
-              ? ' scale-110 bg-nfRed text-white  duration-300'
-              : '  bg-gray-200 text-nfRed'
+              ? ' scale-110 bg-nfRed text-white shadow-custom-shadow-right duration-700'
+              : '   bg-gray-200 text-nfRed duration-200'
+          }
           }`}
         >
           Movies
         </button>
         <button
           onClick={() => handlePageChange('tvShows')}
-          className={` px-4 py-2 text-xs font-bold   ${
+          className={`  px-4 py-2 text-xs  font-bold ${
             currentPage === 'tvShows'
-              ? '  scale-110 bg-nfRed text-white shadow-2xl duration-300'
-              : '  bg-gray-200 text-nfRed'
+              ? ' scale-110 bg-nfRed text-white shadow-custom-shadow-left  duration-700'
+              : '   bg-gray-200 text-nfRed duration-200'
           }`}
         >
           TV Shows
         </button>
       </div>
-      {/* Content for the selected page */}
+
       {currentPage === 'movies' ? (
         // Content for Movies page
-        <ul className="mt-2 grid !h-dvh grid-cols-6 justify-center gap-4 font-truculenta text-lg font-bold">
-          {selectedMovies.map((movie, index) => (
-            <span
-              key={`${movie.id}_${index}`}
-              className="group/listitem mx-auto mb-4 h-fit hover:relative"
+        selectedMovies.length === 0 ? (
+          <div className="mt-2 h-dvh overflow-hidden p-56 text-center font-truculenta text-3xl text-white">
+            There is no selected Movies in your list {''} go to{' '}
+            <Link
+              to={'/movies'}
+              className="my-auto text-sm uppercase text-nfRed duration-300 hover:text-3xl hover:underline"
             >
-              <Link
-                to={{
-                  pathname: `/movies/${movie.id}`, // Pass movie ID as part of the URL
-                  state: { movieId: movie.id }, // Pass movie ID in state as well (optional)
-                }}
+              Movies
+            </Link>{' '}
+          </div>
+        ) : (
+          <ul
+            className={`mt-2 grid grid-cols-6 justify-center gap-4 bg-[#141414] font-truculenta text-lg font-bold ${selectedMovies.length > 12 ? '!h-full' : '!h-dvh'}`}
+          >
+            {selectedMovies.map((movie, index) => (
+              <span
+                key={`${movie.id}_${index}`}
+                className="group/listitem mx-auto mb-4 h-fit duration-700 hover:relative hover:scale-110"
               >
-                <img
-                  src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                  alt={movie.title}
-                  className="h-40 w-52 rounded-xl object-cover  duration-700
-                   group-hover/listitem:h-[17.5rem] group-hover/listitem:grayscale-0"
-                />
-              </Link>
-              <div className="group-hover/listitem::bg-white">
-                <p
-                  className="bg-b-lg mt-2 rounded-b-lg bg-opacity-20
-                      from-[#030303e7] from-10%
-                  via-[#000000af] via-40%
-                  to-[#1b1a1a34] 
-                  to-100% pb-3
-                      text-center text-nfRed group-hover/listitem:absolute group-hover/listitem:bottom-0 group-hover/listitem:left-0 group-hover/listitem:right-0 group-hover/listitem:bg-gradient-to-t group-hover/listitem:pt-8 group-hover/listitem:text-sm group-hover/listitem:text-white"
+                <Link
+                  to={{
+                    pathname: `/movies/${movie.id}`,
+                    state: { movieId: movie.id },
+                  }}
                 >
-                  {movie.title}
-                </p>
-                <p className="mt-2 hidden whitespace-nowrap text-center text-sm text-white group-hover/listitem:absolute group-hover/listitem:bottom-9 group-hover/listitem:left-0 group-hover/listitem:right-0 group-hover/listitem:block">
-                  {movie.release_date.split('-')[0]}
-                </p>
-              </div>
-              <button
-                className="font-sm group/trailer hidden cursor-pointer justify-center bg-gray-800 bg-opacity-60 py-2 text-white group-hover/listitem:absolute group-hover/listitem:bottom-[50%] group-hover/listitem:left-0 group-hover/listitem:right-0 group-hover/listitem:flex"
-                onClick={() =>
-                  handleWatchTrailer(movie.trailers[1] || movie.trailers[0])
-                }
-              >
-                <Icon
-                  icon="mdi:play"
-                  height="30"
-                  width="30"
-                  className="inline rounded-full border-2 border-white bg-black bg-opacity-50"
-                />
-                <span className="ml-2 align-middle transition-opacity duration-700 group-hover/trailer:inline">
-                  Watch Trailer
-                </span>
-              </button>
-              <button
-                className="mt-2 hidden text-center text-white group-hover/listitem:absolute 
-              group-hover/listitem:right-4 group-hover/listitem:top-2 group-hover/listitem:block"
-                onClick={() => handleRemoveMovie(movie)}
-              >
-                <Icon
-                  icon="mdi:close"
-                  height="18"
-                  width="18"
-                  className="z-40 inline rounded-full bg-black bg-opacity-50 hover:text-nfRed"
-                />
-              </button>
-            </span>
-          ))}
-        </ul>
+                  <img
+                    src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                    alt={movie.title}
+                    className="h-72 w-52 rounded-xl object-cover  duration-700 group-hover/listitem:shadow-custom-shadow group-hover/listitem:grayscale-0"
+                  />
+                </Link>
+                <div className="group-hover/listitem:bg-white">
+                  <p className="bg-b-lg mt-2 rounded-b-lg bg-opacity-20 from-[#030303e7] from-10% via-[#000000af] via-40% to-[#1b1a1a34] to-100% pb-3 text-center text-nfRed group-hover/listitem:absolute group-hover/listitem:bottom-0 group-hover/listitem:left-0 group-hover/listitem:right-0 group-hover/listitem:bg-gradient-to-t group-hover/listitem:pt-8 group-hover/listitem:text-sm group-hover/listitem:text-white">
+                    {movie.title}
+                  </p>
+                  <p className="mt-2 hidden whitespace-nowrap text-center text-sm text-white group-hover/listitem:absolute group-hover/listitem:bottom-9 group-hover/listitem:left-0 group-hover/listitem:right-0 group-hover/listitem:block">
+                    {movie.release_date.split('-')[0]}
+                  </p>
+                </div>
+                <button
+                  className="font-sm group/trailer hidden cursor-pointer justify-center bg-gray-800 bg-opacity-60 py-2 text-white group-hover/listitem:absolute group-hover/listitem:bottom-[50%] group-hover/listitem:left-0 group-hover/listitem:right-0 group-hover/listitem:flex"
+                  onClick={() =>
+                    handleWatchTrailer(movie.trailers[1] || movie.trailers[0])
+                  }
+                >
+                  <Icon
+                    icon="mdi:play"
+                    height="30"
+                    width="30"
+                    className="inline rounded-full border-2 border-white bg-black bg-opacity-50"
+                  />
+                  <span className="ml-2 align-middle transition-opacity duration-700 group-hover/trailer:inline">
+                    Watch Trailer
+                  </span>
+                </button>
+                <button
+                  className="mt-2 hidden text-center text-white group-hover/listitem:absolute group-hover/listitem:right-4 group-hover/listitem:top-2 group-hover/listitem:block"
+                  onClick={() => handleRemoveMovie(movie)}
+                >
+                  <Icon
+                    icon="mdi:close"
+                    height="18"
+                    width="18"
+                    className="z-40 inline rounded-full bg-black bg-opacity-50 hover:text-nfRed"
+                  />
+                </button>
+              </span>
+            ))}
+          </ul>
+        )
+      ) : // Content for TV Shows page
+      selectedTVShows.length === 0 ? (
+        <div className="mt-2 h-dvh overflow-hidden p-56 text-center font-truculenta text-3xl text-white">
+          There is no selected TV Shows in your list go to{' '}
+          <Link
+            to={'/tvshows'}
+            className="my-auto text-sm uppercase text-nfRed duration-300 hover:text-3xl hover:underline"
+          >
+            TV Shows
+          </Link>
+        </div>
       ) : (
-        // Content for TV Shows page
-        <ul className="mt-2 grid h-dvh grid-cols-6 justify-center gap-4 font-truculenta text-lg font-bold">
+        <ul
+          className={`mt-2 grid grid-cols-6 justify-center gap-4 bg-[#141414] font-truculenta text-lg font-bold ${selectedTVShows.length > 12 ? '!h-full' : '!h-dvh'}`}
+        >
           {selectedTVShows.map((show, index) => (
             <span
               key={`${show.id}_${index}`}
-              className="group/listitem mx-auto mb-4 h-fit hover:relative"
+              className="group/listitem mx-auto mb-4 h-fit duration-700 hover:relative hover:scale-110"
             >
               <Link
                 to={{
-                  pathname: `/tvshows/${show.id}`, // Pass show ID as part of the URL
-                  state: { showId: show.id }, // Pass show ID in state as well (optional)
+                  pathname: `/tvshows/${show.id}`,
+                  state: { showId: show.id },
                 }}
               >
                 <img
                   src={`https://image.tmdb.org/t/p/w500${show.poster_path}`}
                   alt={show.name}
-                  className="h-40 w-52 rounded-xl object-cover  duration-700 group-hover/listitem:h-[17.5rem] group-hover/listitem:grayscale-0"
+                  className="h-72 w-52 rounded-xl object-cover  duration-700 group-hover/listitem:shadow-custom-shadow group-hover/listitem:grayscale-0"
                 />
               </Link>
-              <div className="group-hover/listitem::bg-white">
-                <p
-                  className="bg-b-lg mt-2 rounded-b-lg bg-opacity-20
-                      from-[#030303e7] from-10%
-                  via-[#000000af] via-40%
-                  to-[#1b1a1a34] 
-                  to-100% pb-3
-                      text-center text-nfRed group-hover/listitem:absolute group-hover/listitem:bottom-0 group-hover/listitem:left-0 group-hover/listitem:right-0 group-hover/listitem:bg-gradient-to-t group-hover/listitem:pt-8 group-hover/listitem:text-sm group-hover/listitem:text-white"
-                >
+              <div className="group-hover/listitem:bg-white">
+                <p className="bg-b-lg mt-2 rounded-b-lg bg-opacity-20 from-[#030303e7] from-10% via-[#000000af] via-40% to-[#1b1a1a34] to-100% pb-3 text-center text-nfRed group-hover/listitem:absolute group-hover/listitem:bottom-0 group-hover/listitem:left-0 group-hover/listitem:right-0 group-hover/listitem:bg-gradient-to-t group-hover/listitem:pt-8 group-hover/listitem:text-sm group-hover/listitem:text-white">
                   {show.name}
                 </p>
                 <p className="mt-2 hidden whitespace-nowrap text-center text-sm text-white group-hover/listitem:absolute group-hover/listitem:bottom-9 group-hover/listitem:left-0 group-hover/listitem:right-0 group-hover/listitem:block">
@@ -203,8 +215,7 @@ function List() {
                 </span>
               </button>
               <button
-                className="mt-2 hidden text-center text-white group-hover/listitem:absolute 
-              group-hover/listitem:right-4 group-hover/listitem:top-2 group-hover/listitem:block"
+                className="mt-2 hidden text-center text-white group-hover/listitem:absolute group-hover/listitem:right-4 group-hover/listitem:top-2 group-hover/listitem:block"
                 onClick={() => handleRemoveShow(show)}
               >
                 <Icon
@@ -218,6 +229,7 @@ function List() {
           ))}
         </ul>
       )}
+
       {selectedTrailer && (
         <div className="fixed bottom-0 left-0 right-0 top-0 mx-auto my-auto flex h-full w-full items-center justify-center bg-black bg-opacity-80">
           <div ref={iframeRef}>

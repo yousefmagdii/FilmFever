@@ -2,23 +2,13 @@ import { useContext } from 'react';
 import { useSortPreferences } from '../contexts/SortPreferencesContext';
 import { useCurrentPage } from '../contexts/CurrentPageContext';
 
-function OrderBy({
-  // isSortedByRating,
-  // setIsSortedByRating,
-  // isSortedByDateAscending,
-  // setIsSortedByDateAscending,
-  // isSortedByDateDescending,
-  // setIsSortedByDateDescending,
-  handleResetPageNumber,
-}) {
+function OrderBy({ handleResetPageNumber }) {
   const {
     isSortedByRating,
     isSortedByDateAscending,
     isSortedByDateDescending,
     setSortingPreferences,
   } = useSortPreferences();
-
-  // console.log('isSortedByRating', isSortedByRating);
 
   const handleRatingClick = () => {
     if (isSortedByRating) {
