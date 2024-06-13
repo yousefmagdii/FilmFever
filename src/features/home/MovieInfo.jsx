@@ -56,19 +56,19 @@ function MovieInfo() {
   const selectedItem = allItems[selectedImageIndex];
   // console.log(selectedItem.type);
   return (
-    <div className="relative ml-12 mt-20 inline-block w-[40%] rounded-lg bg-gray-800 bg-opacity-50 p-5 font-truculenta">
+    <div className="relative mt-14  inline-block rounded-lg  bg-gray-800 bg-opacity-50 p-5 font-truculenta  max-xl:w-full max-[1025px]:mt-0 max-md:mt-0 max-sm:mt-0 xl:ml-12 xl:w-[40%]">
       {selectedItem ? (
         <>
-          <p className="pb-5 text-6xl font-extrabold uppercase text-nfRed">
+          <p className="pb-5 font-extrabold uppercase text-nfRed max-xl:text-center max-xl:text-4xl max-[1025px]:text-2xl max-md:text-2xl xl:text-6xl">
             {selectedItem.data.title || selectedItem.data.name}
           </p>
-          <p className="font-bold leading-8 text-gray-200 opacity-70">
+          <p className="font-bold leading-8 text-gray-200 opacity-70 max-xl:text-center  max-[1025px]:text-sm max-md:text-xs">
             {selectedItem.data.overview}
           </p>
-          <p className="mt-3 contents text-xl font-bold leading-8 text-gray-200">
+          <p className="mt-3  w-full justify-center font-bold leading-8 text-gray-200 max-xl:text-center max-[1025px]:text-sm max-md:text-xs xl:text-xl">
             Rating: {selectedItem.data.vote_average.toFixed(1)}⭐
           </p>
-          <p className="  text-xl font-bold leading-8 text-gray-200">
+          <p className="  font-bold leading-8 text-gray-200 max-xl:text-center max-[1025px]:text-sm max-md:text-xs xl:text-xl">
             {selectedItem.type === 'movie' ? 'Movie' : 'Tv Show'}{' '}
           </p>
 

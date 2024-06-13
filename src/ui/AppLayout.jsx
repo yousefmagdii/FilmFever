@@ -61,11 +61,15 @@ function AppLayout() {
   return (
     <>
       <div
-        className={`bg-image ${
+        className={`bg-image !h-full w-full bg-opacity-0${
           location.pathname === '/movies' ||
           location.pathname === '/tvshows' ||
-          location.pathname === '/list'
-            ? '!h-full w-full bg-opacity-0'
+          // location.pathname === '/tvshows/:id' ||
+          location.pathname === '/list' ||
+          location.pathname === '/'
+            ? // location.pathname === '/tvshows/:id' ||
+              // location.pathname === '/'
+              '!h-full w-full bg-opacity-0'
             : 'overflow-hidden'
         }`}
         style={{

@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 // import { movies } from '../services/movieData';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateSelectedImage } from './homeSlice';
@@ -11,8 +11,30 @@ import useTVShows from '../tvshows/useTVShows';
 function Home() {
   const { movies, isLoading: isLoadingMovies } = useMovies();
   const { shows, isLoading: isLoadingTVShows } = useTVShows();
+  const [numImagesToShow, setNumImagesToShow] = useState(3);
 
   const [selectedImageIndex, setSelectedImageIndex] = useState(2);
+
+  useEffect(() => {
+    const updateNumImages = () => {
+      if (window.innerWidth < 550) {
+        setNumImagesToShow(0);
+      } else if (window.innerWidth < 768) {
+        setNumImagesToShow(1);
+      } else if (window.innerWidth < 1024) {
+        setNumImagesToShow(4);
+      } else if (window.innerWidth < 1280) {
+        setNumImagesToShow(3);
+      } else {
+        setNumImagesToShow(3); // Default to 3 for larger screens
+      }
+    };
+
+    window.addEventListener('resize', updateNumImages);
+    updateNumImages(); // Initial check
+
+    return () => window.removeEventListener('resize', updateNumImages);
+  }, []);
 
   const { imageUrl, name, description } = useSelector((store) => store.home);
 
@@ -64,7 +86,7 @@ function Home() {
     endIndex =
       startIndex + 3 >= allImages.length
         ? allImages.length - 1
-        : startIndex + 3;
+        : startIndex + numImagesToShow;
   }
   if (isLoadingMovies || isLoadingTVShows) return <FilmReelSpinner />;
   return (
@@ -75,7 +97,7 @@ function Home() {
       // }}
     >
       <MovieInfo />
-      <div className="absolute  bottom-12 right-12 flex !h-96 w-[50%] items-center justify-center overflow-hidden">
+      <div className="absolute flex items-center justify-center  overflow-hidden max-xl:left-0 max-xl:right-0 max-xl:mt-10 max-[1025px]:mt-10 xl:bottom-12 xl:right-12 xl:!h-96 xl:w-[50%]">
         <button
           className="absolute left-0 top-1/2 z-10 -translate-y-1/2 transform  rounded-full bg-white   text-nfRed active:bg-black active:text-white"
           onClick={() => moveCarousel('prev')}
@@ -92,7 +114,9 @@ function Home() {
             key={startIndex + index}
             src={`https://image.tmdb.org/t/p/w500${image}`}
             alt={`Thumbnail ${startIndex + index + 1}`}
-            className={`  w-1/4 transform cursor-pointer rounded-3xl border-2 border-transparent p-1  ${startIndex + index === selectedImageIndex ? 'border-nfRed' : 'opacity-90 hover:opacity-100 hover:duration-300 hover:ease-in-out'}`}
+            className={` transform cursor-pointer rounded-3xl border-2 border-transparent
+               p-1 max-xl:w-1/5 max-[1025px]:w-1/6 max-md:w-1/3 max-sm:w-1/2 xl:w-1/4  
+               ${startIndex + index === selectedImageIndex ? 'border-nfRed' : 'opacity-90 hover:opacity-100 hover:duration-300 hover:ease-in-out'}`}
             onClick={() => selectImage(startIndex + index)}
           />
         ))}

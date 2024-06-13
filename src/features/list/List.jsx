@@ -12,7 +12,28 @@ function List() {
   const { selectedMovies, removeMovie } = useSelectedMovies();
   const { selectedTVShows, removeShow } = useSelectedTVShows();
   const [selectedTrailer, setSelectedTrailer] = useState(null);
+  const [numOfContentPerRaw, setNumOfContentPerRaw] = useState(3);
 
+  useEffect(() => {
+    const updateNumImages = () => {
+      if (window.innerWidth < 640) {
+        setNumOfContentPerRaw(1 * 2);
+      } else if (window.innerWidth < 768) {
+        setNumOfContentPerRaw(2 * 2);
+      } else if (window.innerWidth < 1024) {
+        setNumOfContentPerRaw(4 * 2);
+      } else if (window.innerWidth < 1280) {
+        setNumOfContentPerRaw(5 * 2);
+      } else {
+        setNumOfContentPerRaw(6 * 2); // Default to 3 for larger screens
+      }
+    };
+
+    window.addEventListener('resize', updateNumImages);
+    updateNumImages(); // Initial check
+
+    return () => window.removeEventListener('resize', updateNumImages);
+  }, []);
   const iframeRef = useRef(null);
   const [currentPage, setCurrentPage] = useState(() => {
     // Initially set to 'movies' if not set in localStorage or the value is invalid, otherwise get the value from localStorage
@@ -99,13 +120,14 @@ function List() {
             </Link>{' '}
           </div>
         ) : (
+          // grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5
           <ul
-            className={`mt-2 grid grid-cols-6 justify-center gap-4 bg-[#141414] font-truculenta text-lg font-bold ${selectedMovies.length > 12 ? '!h-full' : '!h-dvh'}`}
+            className={`mt-2 grid grid-cols-1 justify-center gap-4 bg-[#141414] font-truculenta text-lg font-bold sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 ${selectedMovies.length > numOfContentPerRaw ? '!h-full' : '!h-dvh'}`}
           >
             {selectedMovies.map((movie, index) => (
               <span
                 key={`${movie.id}_${index}`}
-                className="group/listitem mx-auto mb-4 h-fit duration-700 hover:relative hover:scale-110"
+                className="group/listitem mx-auto mb-4 h-fit duration-700 hover:relative xl:hover:scale-110"
               >
                 <Link
                   to={{
@@ -171,7 +193,7 @@ function List() {
         </div>
       ) : (
         <ul
-          className={`mt-2 grid grid-cols-6 justify-center gap-4 bg-[#141414] font-truculenta text-lg font-bold ${selectedTVShows.length > 12 ? '!h-full' : '!h-dvh'}`}
+          className={`mt-2 grid grid-cols-1 justify-center gap-4 bg-[#141414] font-truculenta text-lg font-bold sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6  ${selectedTVShows.length > numOfContentPerRaw ? '!h-full' : '!h-dvh'}`}
         >
           {selectedTVShows.map((show, index) => (
             <span
@@ -191,7 +213,12 @@ function List() {
                 />
               </Link>
               <div className="group-hover/listitem:bg-white">
-                <p className="bg-b-lg mt-2 rounded-b-lg bg-opacity-20 from-[#030303e7] from-10% via-[#000000af] via-40% to-[#1b1a1a34] to-100% pb-3 text-center text-nfRed group-hover/listitem:absolute group-hover/listitem:bottom-0 group-hover/listitem:left-0 group-hover/listitem:right-0 group-hover/listitem:bg-gradient-to-t group-hover/listitem:pt-8 group-hover/listitem:text-sm group-hover/listitem:text-white">
+                <p
+                  className="bg-b-lg mt-2 rounded-b-lg bg-opacity-20 from-[#030303e7] from-10% via-[#000000af] via-40% to-[#1b1a1a34] 
+                to-100% pb-3 text-center text-nfRed group-hover/listitem:absolute group-hover/listitem:bottom-0 group-hover/listitem:left-0
+                 group-hover/listitem:right-0 group-hover/listitem:bg-gradient-to-t group-hover/listitem:pt-8 group-hover/listitem:text-sm
+                  group-hover/listitem:text-white"
+                >
                   {show.name}
                 </p>
                 <p className="mt-2 hidden whitespace-nowrap text-center text-sm text-white group-hover/listitem:absolute group-hover/listitem:bottom-9 group-hover/listitem:left-0 group-hover/listitem:right-0 group-hover/listitem:block">

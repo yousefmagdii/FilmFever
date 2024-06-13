@@ -100,14 +100,14 @@ function PlayButtons({ iconClass, movieId, tvShowId, mediaType }) {
   };
 
   return (
-    <div className="float-end mt-2 flex justify-center font-truculenta text-white">
+    <div className="mt-2 flex justify-center font-truculenta text-white xl:float-end">
       <Toaster position="top-center" reverseOrder={false} />
       <div className="block">
         <button
           className="watch-trailer-button flex rounded-full border-2 bg-white text-black hover:bg-gray-200"
           onClick={handleWatchTrailer}
         >
-          <p className="my-auto w-fit justify-between py-1 pl-5 font-semibold">
+          <p className="my-auto w-fit justify-between py-1 pl-5 font-semibold max-md:text-xs">
             Watch Trailer
           </p>
           <Icon icon="mi:play" height="40" width="70" className="p-2 pl-0" />
@@ -123,6 +123,7 @@ function PlayButtons({ iconClass, movieId, tvShowId, mediaType }) {
                 src={trailerUrl}
                 frameBorder="0"
                 allowFullScreen
+                className="max-[768px]:h-72 max-[768px]:w-[22rem]"
               ></iframe>
             </div>
           </div>
@@ -131,7 +132,7 @@ function PlayButtons({ iconClass, movieId, tvShowId, mediaType }) {
       <div className="block duration-700">
         {heartStates[content?.id] ? (
           <button
-            className="mx-3 flex rounded-full border-2 border-gray-800 border-opacity-60 bg-gray-800 bg-opacity-60 text-nfRed"
+            className="mx-3 flex rounded-full border-2 border-gray-800  border-opacity-60 bg-gray-800 bg-opacity-60 text-nfRed max-md:text-xs"
             onClick={handleToggleHeartState}
           >
             <p className="my-auto w-fit justify-between py-1 pl-4 font-semibold">
@@ -146,7 +147,7 @@ function PlayButtons({ iconClass, movieId, tvShowId, mediaType }) {
           </button>
         ) : (
           <button
-            className="mx-3 flex rounded-full border-2 bg-white text-black hover:bg-gray-200"
+            className="mx-3 flex rounded-full border-2 bg-white  text-black hover:bg-gray-200 max-md:text-xs"
             onClick={handleToggleHeartState}
           >
             <p className="my-auto w-fit justify-between py-1 pl-4 font-semibold">
