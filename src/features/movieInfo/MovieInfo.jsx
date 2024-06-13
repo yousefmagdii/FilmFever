@@ -68,7 +68,7 @@ function MovieInfo() {
             <h1 className=" pb-5  text-6xl font-extrabold uppercase text-nfRed max-xl:hidden">
               {title}
             </h1>
-            <p className="xl:w-[43rem]] max-xl:text-center max-[1025px]:text-sm max-md:w-[22rem] max-sm:text-xs  md:w-[24rem] lg:w-[43rem] xl:text-xl">
+            <p className="max-xl:mx-auto max-xl:text-center max-[1025px]:text-sm max-md:w-[18rem] max-sm:text-xs  md:w-[24rem] lg:w-[45rem] xl:text-xl ">
               {overview}
             </p>
             {movie.genres.length > 0 && (
