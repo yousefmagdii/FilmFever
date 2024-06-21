@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import LazyLoad from 'react-lazyload';
 import { Link } from 'react-router-dom';
 
 function SearchBox({
@@ -75,13 +76,15 @@ function SearchBox({
             {content.media_type}
           </span>
           {content.poster_path && (
-            <img
-              src={`https://image.tmdb.org/t/p/w500${content.poster_path}`}
-              alt={
-                content.media_type === 'movie' ? content.title : content.name
-              }
-              className="h-14 w-14 rounded-lg bg-cover object-cover duration-1000 xl:group-hover:ml-auto xl:group-hover:h-24 xl:group-hover:w-24"
-            />
+            <LazyLoad height={400} offset={100}>
+              <img
+                src={`https://image.tmdb.org/t/p/w500${content.poster_path}`}
+                alt={
+                  content.media_type === 'movie' ? content.title : content.name
+                }
+                className="h-14 w-14 rounded-lg bg-cover object-cover duration-1000 xl:group-hover:ml-auto xl:group-hover:h-24 xl:group-hover:w-24"
+              />
+            </LazyLoad>
           )}
         </Link>
       ))}

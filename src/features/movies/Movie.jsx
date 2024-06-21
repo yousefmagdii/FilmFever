@@ -1,5 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import useMovies from './useMovies';
+import LazyLoad from 'react-lazyload';
+
 import Spinner from '../../ui/Spinner';
 import { Icon } from '@iconify/react';
 import { useSelectedMovies } from '../../contexts/SelectedMoviesContext';
@@ -162,13 +164,19 @@ function Movie() {
                     state: { movies, currentPage },
                   }}
                 >
-                  <img
-                    src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                    alt={movie.title}
-                    className={`h-90 w-64 rounded-lg bg-cover object-cover ${
-                      isFilterClicked ? 'cursor-no-drop' : ''
-                    }`}
-                  />
+                  <LazyLoad height={400} offset={100}>
+                    <img
+                      src={
+                        movie.poster_path
+                          ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                          : 'https://images.unsplash.com/photo-1620145648299-f926ac0a9470?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+                      }
+                      alt={movie.title}
+                      className={`h-90 w-64 rounded-lg bg-cover object-cover ${
+                        isFilterClicked ? 'cursor-no-drop' : ''
+                      }`}
+                    />
+                  </LazyLoad>
                 </Link>
                 <span className="absolute bottom-0 left-0 right-0 z-10 hidden bg-gradient-to-t from-[#121212ac] to-[#00000000] py-5 text-center font-bold text-orange-50 group-hover:block group-hover:rounded-b-lg group-hover:duration-700">
                   <span className="p-1">{movie.title}</span>

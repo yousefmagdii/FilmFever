@@ -4,6 +4,7 @@ import PlayButtons from '../home/PlayButtons';
 import { Icon } from '@iconify/react';
 import FilmReelSpinner from '../../ui/Spinner';
 import useMovieById from '../services/useMovieById';
+import LazyLoad from 'react-lazyload';
 const API_KEY = '5bd0066ae9f9e2c1b2f8e7442247c890';
 
 function MovieInfo() {
@@ -50,12 +51,14 @@ function MovieInfo() {
           </h1>
           <span className="relative my-auto ">
             {poster_path && (
-              <img
-                src={`https://image.tmdb.org/t/p/w500${poster_path}`}
-                alt={title}
-                className="my-auto h-fit w-80 rounded-md shadow-2xl shadow-[rgba(255,255,255,.1)]
-                max-xl:mx-auto max-[1025px]:w-40 max-md:w-36 max-sm:w-36   "
-              />
+              <LazyLoad height={400} offset={100}>
+                <img
+                  src={`https://image.tmdb.org/t/p/w500${poster_path}`}
+                  alt={title}
+                  className="my-auto h-auto w-80 rounded-md shadow-2xl shadow-[rgba(255,255,255,.1)] max-xl:mx-auto
+            max-[1025px]:w-40 max-md:w-36 max-sm:h-auto max-sm:w-36 md:h-fit"
+                />
+              </LazyLoad>
             )}
             <span
               className="absolute bottom-0  left-0 right-0 bg-white text-center font-madimi text-xl font-extrabold

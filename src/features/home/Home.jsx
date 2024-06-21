@@ -7,6 +7,7 @@ import MovieInfo from './MovieInfo';
 import useMovies from '../movies/useMovies';
 import FilmReelSpinner from '../../ui/Spinner';
 import useTVShows from '../tvshows/useTVShows';
+import LazyLoad from 'react-lazyload';
 
 function Home() {
   const { movies, isLoading: isLoadingMovies } = useMovies();

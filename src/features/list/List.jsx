@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import useMovies from '../movies/useMovies';
 import FilmReelSpinner from '../../ui/Spinner';
 import useMovieById from '../services/useMovieById';
+import LazyLoad from 'react-lazyload';
 
 function List() {
   const { movies, isLoading } = useMovies();
@@ -135,11 +136,17 @@ function List() {
                     state: { movieId: movie.id },
                   }}
                 >
-                  <img
-                    src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                    alt={movie.title}
-                    className="h-72 w-52 rounded-xl object-cover  duration-700 group-hover/listitem:shadow-custom-shadow group-hover/listitem:grayscale-0"
-                  />
+                  <LazyLoad height={400} offset={100}>
+                    <img
+                      src={
+                        movie.poster_path
+                          ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                          : 'https://images.unsplash.com/photo-1620145648299-f926ac0a9470?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+                      }
+                      alt={movie.title}
+                      className="h-72 w-52 rounded-xl object-cover  duration-700 group-hover/listitem:shadow-custom-shadow group-hover/listitem:grayscale-0"
+                    />
+                  </LazyLoad>
                 </Link>
                 <div className="group-hover/listitem:bg-white">
                   <p className="bg-b-lg mt-2 rounded-b-lg bg-opacity-20 from-[#030303e7] from-10% via-[#000000af] via-40% to-[#1b1a1a34] to-100% pb-3 text-center text-nfRed group-hover/listitem:absolute group-hover/listitem:bottom-0 group-hover/listitem:left-0 group-hover/listitem:right-0 group-hover/listitem:bg-gradient-to-t group-hover/listitem:pt-8 group-hover/listitem:text-sm group-hover/listitem:text-white">
@@ -206,11 +213,17 @@ function List() {
                   state: { showId: show.id },
                 }}
               >
-                <img
-                  src={`https://image.tmdb.org/t/p/w500${show.poster_path}`}
-                  alt={show.name}
-                  className="h-72 w-52 rounded-xl object-cover  duration-700 group-hover/listitem:shadow-custom-shadow group-hover/listitem:grayscale-0"
-                />
+                <LazyLoad height={400} offset={100}>
+                  <img
+                    src={
+                      show.poster_path
+                        ? `https://image.tmdb.org/t/p/w500${show.poster_path}`
+                        : 'https://images.unsplash.com/photo-1620145648299-f926ac0a9470?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+                    }
+                    alt={show.name}
+                    className="h-72 w-52 rounded-xl object-cover  duration-700 group-hover/listitem:shadow-custom-shadow group-hover/listitem:grayscale-0"
+                  />
+                </LazyLoad>
               </Link>
               <div className="group-hover/listitem:bg-white">
                 <p
