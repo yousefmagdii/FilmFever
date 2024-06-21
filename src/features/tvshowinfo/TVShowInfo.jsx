@@ -58,8 +58,8 @@ function TVShowInfo() {
                 <img
                   src={`https://image.tmdb.org/t/p/w500${poster_path}`}
                   alt={name}
-                  className="my-auto h-fit w-80 rounded-md shadow-2xl shadow-[rgba(255,255,255,.1)]
-                max-xl:mx-auto max-[1025px]:w-40 max-md:w-36 max-sm:w-36   "
+                  className="my-auto h-auto w-80 rounded-md shadow-2xl shadow-[rgba(255,255,255,.1)] max-xl:mx-auto
+            max-[1025px]:w-40 max-md:w-36 max-sm:h-auto max-sm:w-36 md:h-fit"
                 />
               </LazyLoad>
             )}
